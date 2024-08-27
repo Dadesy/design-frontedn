@@ -14,7 +14,7 @@ import MainMenu from "@/components/MainMenu/MainMenu.vue";
             </a-layout-sider>
             <a-layout>
                 <the-header/>
-                <a-layout-content class="p-[24px]">
+                <a-layout-content>
                     <RouterView/>
                 </a-layout-content>
                 <the-footer/>
