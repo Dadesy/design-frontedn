@@ -123,7 +123,7 @@ import { reactive, ref, onMounted, type UnwrapRef } from 'vue';
 import { SearchOutlined } from '@ant-design/icons-vue';
 import { message } from 'ant-design-vue';
 import type { TableColumnType } from 'ant-design-vue';
-import { Key } from 'vue';
+import type { Key } from 'ant-design-vue/es/table/interface';
 
 type ColumnDataIndex = string;
 

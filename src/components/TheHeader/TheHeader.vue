@@ -1,16 +1,10 @@
 <template>
   <a-page-header
-      style="border: 1px solid rgb(235, 237, 240)"
+      style="border: 1px solid rgb(235, 237, 240); padding: 16px;"
       title="ЭФКО дизайн"
       :breadcrumb="{ routes: breadcrumbRoutes }"
-  ><a-flex justify="space-between" align="center" class="h-full">
-            <span/>
-            <div class="w-10 h-10 border-r-[50%] overflow-hidden">
-                <img src="../../assets/img/user.png" alt="user" class="block h-full"/>
-            </div>
-        </a-flex>
-   </a-page-header>
-  
+  >
+  </a-page-header>
 </template>
 
 <script lang="ts" setup>

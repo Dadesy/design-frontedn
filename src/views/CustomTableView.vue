@@ -1,5 +1,10 @@
 <template>
   <div>
+      <div class="switch">
+        <a-switch v-model:checked="loading" />
+         <p>Прогрузка таблицы</p>
+      </div>
+
     <a-table
         class="lazy-scroll"
         :columns="columns"
@@ -161,7 +166,7 @@ interface DataItem {
   switch: boolean;
 }
 
-const loading = ref<boolean>(true);
+const loading = ref<boolean>(false);
 const isModalVisible = ref<boolean>(false);
 const isEditing = ref<boolean>(false);
 const editingKey = ref<string | null>(null);
@@ -401,7 +406,10 @@ onMounted(() => {
   margin-right: 8px;
 }
 
-.table {
-  height: calc(100vh - 300px);
+.switch {
+  padding: 10px 20px;
+  display: flex;
+  gap: 10px;
 }
+
 </style>
