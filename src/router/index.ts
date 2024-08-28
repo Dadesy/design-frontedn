@@ -4,6 +4,7 @@ import AdvancedTableView from "@/views/AdvancedTableView.vue";
 import ListView from "@/views/ListView.vue";
 import BasicTableView from "@/views/BasicTableView.vue";
 import CustomTableView from "@/views/CustomTableView.vue";
+import CalendarView from "@/views/CalendarView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -50,11 +51,11 @@ const router = createRouter({
       ]
     },
     {
-      path: '/list',
-      name: 'list',
-      component: ListView,
+      path: '/calendar',
+      name: 'calendar',
+      component: CalendarView,
       meta: {
-        breadcrumbName: 'List'
+        breadcrumbName: 'Календарь'
       }
     }
   ]

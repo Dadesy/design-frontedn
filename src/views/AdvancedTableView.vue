@@ -16,7 +16,7 @@
               <template v-if="editableData[record.key]">
                 <a-select
                     v-if="column.dataIndex === 'address'"
-                    v-model:value="editableData[record.key][column.dataIndex]"
+                    v-model:value="editableData[record.key][column.dataIndex as 'address']"
                     style="width: 100%; margin: -5px 0"
                 >
                   <a-select-option value="London Park">London Park</a-select-option>
@@ -25,19 +25,19 @@
                 </a-select>
                 <a-input
                     v-else-if="['name', 'age'].includes(column.dataIndex)"
-                    v-model:value="editableData[record.key][column.dataIndex]"
+                    v-model:value="editableData[record.key][column.dataIndex as 'name' | 'age']"
                     style="margin: -5px 0"
                 />
                 <a-checkbox
                     v-else-if="column.dataIndex === 'checkbox'"
-                    v-model:checked="editableData[record.key][column.dataIndex]"
+                    v-model:checked="editableData[record.key][column.dataIndex as 'checkbox']"
                     style="margin: -5px 0"
                 >
                   Включить
                 </a-checkbox>
                 <a-switch
                     v-else-if="column.dataIndex === 'switch'"
-                    v-model:checked="editableData[record.key][column.dataIndex]"
+                    v-model:checked="editableData[record.key][column.dataIndex as 'switch']"
                     style="margin: -5px 0"
                 />
               </template>
@@ -93,7 +93,7 @@
               :placeholder="`Search ${column.dataIndex}`"
               :value="selectedKeys[0]"
               style="width: 188px; margin-bottom: 8px; display: block"
-              @change="e => setSelectedKeys(e.target.value ? [e.target.value] : [])"
+              @change="(e: Event) => setSelectedKeys((e.target as HTMLInputElement).value ? [(e.target as HTMLInputElement).value] : [])"
               @pressEnter="handleSearch(selectedKeys, confirm, column.dataIndex)"
           />
           <a-button
@@ -119,13 +119,39 @@
 
 <script lang="ts" setup>
 import { cloneDeep } from 'lodash';
-import { reactive, ref, onMounted } from 'vue';
+import { reactive, ref, onMounted, type UnwrapRef } from 'vue';
 import { SearchOutlined } from '@ant-design/icons-vue';
 import { message } from 'ant-design-vue';
-import type { UnwrapRef } from 'vue';
-import PageTitle from "@/components/PageTitle/PageTitle.vue";
+import type { TableColumnType } from 'ant-design-vue';
+import { Key } from 'vue';
 
-const loading = ref(true);
+type ColumnDataIndex = string;
+
+interface DataItem {
+  key: string;
+  name: string;
+  age: number;
+  address: string;
+  checkbox: boolean;
+  switch: boolean;
+}
+
+interface EditableDataItem {
+  key: Key;
+  name?: string;
+  age?: number;
+  address?: string;
+  checkbox?: boolean;
+  switch?: boolean;
+}
+
+interface ColumnType extends TableColumnType<DataItem> {
+  dataIndex: ColumnDataIndex;
+  customFilterDropdown?: boolean;
+  onFilterDropdownOpenChange?: (visible: boolean) => void;
+}
+
+const loading = ref<boolean>(true);
 
 onMounted(() => {
   setTimeout(() => {
@@ -133,7 +159,7 @@ onMounted(() => {
   }, 1000);
 });
 
-const columns = [
+const columns: ColumnType[] = [
   {
     title: 'name',
     dataIndex: 'name',
@@ -145,12 +171,12 @@ const columns = [
       { text: 'John', value: 'John' },
       { text: 'James', value: 'James' },
     ],
-    onFilter: (value, record) => record.name.includes(value),
+    onFilter: (value, record) => record.name.includes(value as string),
     customFilterDropdown: true,
     onFilterDropdownOpenChange: visible => {
       if (visible) {
         setTimeout(() => {
-          searchInput.value.focus();
+          searchInput.value?.focus();
         }, 100);
       }
     },
@@ -171,7 +197,7 @@ const columns = [
     onFilterDropdownOpenChange: visible => {
       if (visible) {
         setTimeout(() => {
-          searchInput.value.focus();
+          searchInput.value?.focus();
         }, 100);
       }
     },
@@ -187,12 +213,12 @@ const columns = [
       { text: 'New York Park', value: 'New York Park' },
       { text: 'San Francisco Park', value: 'San Francisco Park' },
     ],
-    onFilter: (value, record) => record.address.includes(value),
+    onFilter: (value, record) => record.address.includes(value as string),
     customFilterDropdown: true,
     onFilterDropdownOpenChange: visible => {
       if (visible) {
         setTimeout(() => {
-          searchInput.value.focus();
+          searchInput.value?.focus();
         }, 100);
       }
     },
@@ -215,15 +241,6 @@ const columns = [
     key: 'operation',
   },
 ];
-
-interface DataItem {
-  key: string;
-  name: string;
-  age: number;
-  address: string;
-  checkbox: boolean;
-  switch: boolean;
-}
 
 const data: DataItem[] = [];
 for (let i = 0; i < 100; i++) {
@@ -249,49 +266,58 @@ for (let i = 0; i < 10; i++) {
   });
 }
 
-const dataSource = ref(data);
-const filteredDataSource = ref(data);
-const skeletonDataSource = ref(skeletonData); // Данные для скелетона
-const editableData: UnwrapRef<Record<string, DataItem>> = reactive({});
+const dataSource = ref<DataItem[]>(data);
+const filteredDataSource = ref<DataItem[]>(data);
+const skeletonDataSource = ref<DataItem[]>(skeletonData);
+const editableData: UnwrapRef<Record<Key, EditableDataItem>> = reactive({});
 
-const searchInput = ref();
+const searchInput = ref<HTMLInputElement | null>(null);
 
 const state = reactive({
   searchText: '',
   searchedColumn: '',
 });
 
-const edit = (key: string) => {
-  editableData[key] = cloneDeep(dataSource.value.filter(item => key === item.key)[0]);
+const edit = (key: Key) => {
+  const record = dataSource.value.find(item => key === item.key);
+  if (record) {
+    editableData[key] = cloneDeep(record);
+  }
 };
 
-const save = (key: string) => {
-  Object.assign(dataSource.value.filter(item => key === item.key)[0], editableData[key]);
+const save = (key: Key) => {
+  const record = dataSource.value.find(item => key === item.key);
+  if (record && editableData[key]) {
+    Object.assign(record, editableData[key]);
+    delete editableData[key];
+    message.success('Изменения сохранены');
+  }
+};
+
+const cancel = (key: Key) => {
   delete editableData[key];
-  message.success('Изменения сохранены');
 };
 
-const cancel = (key: string) => {
-  delete editableData[key];
-};
-
-const deleteRow = (key: string) => {
+const deleteRow = (key: Key) => {
   dataSource.value = dataSource.value.filter(item => item.key !== key);
   filteredDataSource.value = filteredDataSource.value.filter(item => item.key !== key);
   message.success('Запись удалена');
 };
 
-const handleTableChange = (pagination, filters, sorter) => {
+const handleTableChange = (
+    filters: Record<string, (string | number | boolean)[] | null>,
+    sorter: any
+) => {
   let filteredData = [...dataSource.value];
 
   if (filters.name) {
-    filteredData = filteredData.filter(item => filters.name.includes(item.name));
+    filteredData = filteredData.filter(item => filters.name?.includes(item.name));
   }
   if (filters.age) {
-    filteredData = filteredData.filter(item => filters.age.includes(item.age));
+    filteredData = filteredData.filter(item => filters.age?.includes(item.age));
   }
   if (filters.address) {
-    filteredData = filteredData.filter(item => filters.address.includes(item.address));
+    filteredData = filteredData.filter(item => filters.address?.includes(item.address));
   }
 
   if (sorter.order) {
@@ -311,14 +337,18 @@ const handleTableChange = (pagination, filters, sorter) => {
   filteredDataSource.value = filteredData;
 };
 
-const handleSearch = (selectedKeys, confirm, dataIndex) => {
+const handleSearch = (
+    selectedKeys: string[],
+    confirm: () => void,
+    dataIndex: string
+) => {
   confirm();
   state.searchText = selectedKeys[0];
   state.searchedColumn = dataIndex;
 };
 
-const handleReset = clearFilters => {
-  clearFilters({ confirm: true });
+const handleReset = (clearFilters: () => void) => {
+  clearFilters();
   state.searchText = '';
 };
 </script>

@@ -2,17 +2,13 @@
   <a-table :columns="columns" :data-source="data">
     <template #headerCell="{ column }">
       <template v-if="column.key === 'name'">
-        <span>
-          Имя
-        </span>
+        <span>Имя</span>
       </template>
     </template>
 
     <template #bodyCell="{ column, record }">
       <template v-if="column.key === 'name'">
-        <span>
-          {{ record.name }}
-        </span>
+        <span>{{ record.name }}</span>
       </template>
       <template v-else-if="column.key === 'roles'">
         <span>
@@ -30,7 +26,18 @@
 </template>
 
 <script lang="ts" setup>
-import { SmileOutlined, DownOutlined } from '@ant-design/icons-vue';
+import { ref } from 'vue';
+
+interface DataItem {
+  key: string;
+  name: string;
+  age: number;
+  address: string;
+  position: string;
+  department: string;
+  roles: string[];
+}
+
 const columns = [
   {
     title: 'Имя',
@@ -64,7 +71,7 @@ const columns = [
   },
 ];
 
-const data = [
+const data = ref<DataItem[]>([
   {
     key: '1',
     name: 'Алексей Иванов',
@@ -101,5 +108,5 @@ const data = [
     department: 'Контроль качества',
     roles: ['тестировщик', 'педант'],
   },
-];
+]);
 </script>

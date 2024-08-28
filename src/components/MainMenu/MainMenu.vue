@@ -28,16 +28,16 @@
       </a-menu-item>
     </a-sub-menu>
 
-    <a-menu-item key="/list">
-      <unordered-list-outlined/>
-      <span>Пример списка</span>
+    <a-menu-item key="/calendar">
+      <CalendarOutlined />
+      <span>Календарь</span>
     </a-menu-item>
 
   </a-menu>
 </template>
 
 <script setup lang="ts">
-import {FormOutlined, NotificationOutlined, TableOutlined, UnorderedListOutlined} from "@ant-design/icons-vue";
+import {FormOutlined, NotificationOutlined, TableOutlined, CalendarOutlined } from "@ant-design/icons-vue";
 import {ref} from 'vue';
 import {useRouter} from "vue-router";
 
