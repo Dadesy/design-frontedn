@@ -6,12 +6,13 @@ import { createApp } from 'vue';
 import Antd from 'ant-design-vue';
 import App from './App.vue';
 import router from './router';
-import VueTheMask from 'vue-the-mask';
+import maskDirective from "./directives/mask";
+
 
 const app = createApp(App)
 
 app.use(router)
 app.use(Antd)
-app.use(VueTheMask)
+app.directive('mask', maskDirective);
 
 app.mount('#app')
