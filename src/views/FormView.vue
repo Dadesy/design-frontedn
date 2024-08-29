@@ -66,7 +66,7 @@
                 </label>
 
             </a-card>
-            <a-card class="w-full overflow-hidden" title="Выпадающий списко, чекбокс, свитчер">
+            <a-card class="w-full overflow-hidden" title="Выпадающий список, чекбокс, свитчер">
 
                 <label class="flex flex-col gap-2 mb-5">
                     <span>Вариант выпадающего списка</span>
@@ -80,6 +80,17 @@
                         <a-select-option value="ИСУИ">ИСУИ</a-select-option>
                         <a-select-option value="MDM">MDM</a-select-option>
                     </a-select>
+                </label>
+
+                <label class="flex flex-col gap-2 mb-5">
+                    <span>Вариант выпадающего списка c множественным выбором</span>
+                    <a-select
+                        class="w-full"
+                        :options="optionsMultiple"
+                        mode="multiple"
+                        size="large"
+                        placeholder="Выберите варианты"
+                    />
                 </label>
 
                 <label class="flex flex-col gap-2 mb-5">
@@ -142,29 +153,39 @@
 
             </a-card>
 
-            <a-card class="w-full overflow-hidden" title="Загрузка файлов">
+            <a-card class="w-full overflow-hidden" title="Загрузка/скачивание файлов">
 
-                <label class="flex flex-col gap-2 mb-5">
-                    <span>Выберите или перетащите файл</span>
-                    <a-upload
-                        v-model:file-list="fileList"
-                        name="avatar"
-                        list-type="picture-card"
-                        class="avatar-uploader"
-                        :show-upload-list="false"
-                        action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                        :before-upload="beforeUpload"
-                        @change="handleChange"
-                    >
-                        <img v-if="imageUrl" :src="imageUrl" alt="avatar"/>
-                        <div v-else>
-                            <loading-outlined v-if="loading"></loading-outlined>
-                            <plus-outlined v-else></plus-outlined>
-                            <div class="ant-upload-text">Upload</div>
-                        </div>
-                    </a-upload>
-                </label>
+                <a-flex vertical gap="small">
+                    <div class="flex flex-col gap-2 mb-5">
+                        <span>Выберите или перетащите файл</span>
+                        <a-upload
+                            v-model:file-list="fileList"
+                            name="avatar"
+                            list-type="picture-card"
+                            class="avatar-uploader"
+                            :show-upload-list="false"
+                            action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                            :before-upload="beforeUpload"
+                            @change="handleChange"
+                        >
+                            <img v-if="imageUrl" :src="imageUrl" alt="avatar"/>
+                            <div v-else>
+                                <loading-outlined v-if="loading"></loading-outlined>
+                                <plus-outlined v-else></plus-outlined>
+                                <div class="ant-upload-text">Upload</div>
+                            </div>
+                        </a-upload>
+                    </div>
 
+                    <a-flex>
+                        <a-button type="primary" size="large" href="./files/npl.jpg" download>
+                            <template #icon>
+                                <DownloadOutlined />
+                            </template>
+                            Скачать файл
+                        </a-button>
+                    </a-flex>
+                </a-flex>
             </a-card>
         </a-flex>
 
@@ -178,7 +199,7 @@
 </template>
 <script setup lang="ts">
 import PageTitle from "@/components/PageTitle/PageTitle.vue";
-import {EyeOutlined, InfoCircleOutlined, PlusOutlined, LoadingOutlined} from "@ant-design/icons-vue";
+import {EyeOutlined, InfoCircleOutlined, PlusOutlined, LoadingOutlined, DownloadOutlined} from "@ant-design/icons-vue";
 import {ref} from "vue";
 import CountriesSelect from "@/components/CountriesSelect/CountriesSelect.vue";
 import AddressSelect from "@/components/AddressSelect/AddressSelect.vue";
@@ -188,6 +209,8 @@ import type {UploadChangeParam, UploadProps} from 'ant-design-vue';
 
 let emailError = ref<string | null>('');
 let phoneError = ref<string | null>('');
+
+const optionsMultiple = [{value: 'Иван'}, {value: 'Марина'}, {value: 'Василий'}, {value: 'Анатолий'}, {value: 'Ирина'}, {value: 'Андрей'}, {value: 'Карина'}]
 
 const valueBirthday = ref<Dayjs>();
 const valueTime = ref(dayjs('00:00', 'HH:mm'));

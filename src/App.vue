@@ -9,14 +9,24 @@ import ru_RU from "ant-design-vue/locale/ru_RU";
 
 import dayjs from 'dayjs'
 import 'dayjs/locale/ru'
+import {ref} from "vue";
+
 dayjs.locale('ru')
+
+const currentTheme = ref({token: undefined});
+
+document.addEventListener('setTheme', (e) => {
+    const themeData = (e as CustomEvent).detail;
+
+    currentTheme.value = { token: themeData.token }
+})
 
 </script>
 
 <template>
-    <a-config-provider :locale="ru_RU">
-        <a-space direction="vertical" :style="{ width: '100%' }" :size="[0, 48]">
-            <a-layout>
+    <a-config-provider :locale="ru_RU" :theme="currentTheme">
+        <a-space direction="vertical" :style="{ width: '100%' }" :size="[0, 48]" class="flex-grow">
+            <a-layout class="flex-grow min-h-dvh">
                 <a-layout-sider class="flex-grow" collapsible width="300" theme="light">
                     <main-menu/>
                 </a-layout-sider>

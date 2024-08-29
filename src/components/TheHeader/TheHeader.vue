@@ -1,6 +1,6 @@
 <template>
   <a-page-header
-      style="border: 1px solid rgb(235, 237, 240); padding: 16px;"
+      style="padding: 16px;"
       title="ЭФКО дизайн"
       :breadcrumb="{ routes: breadcrumbRoutes }"
   >

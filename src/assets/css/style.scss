@@ -1,3 +1,11 @@
 #app {
   @apply flex flex-col h-full
 }
+
+.error-page-example {
+  height: calc(100vh - 96px - 65px);
+}
+
+:where(.css-dev-only-do-not-override-19iuou).ant-btn > .anticon {
+  display: inline-flex;
+}
