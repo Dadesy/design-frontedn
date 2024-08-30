@@ -14,7 +14,7 @@
             <template #title>
                 <span>
                     <table-outlined/>
-                    Пример таблицы
+                    <span>Пример таблицы</span>
                 </span>
             </template>
             <a-menu-item key="/table/basic">
@@ -37,7 +37,7 @@
             <template #title>
                 <span>
                     <warning-outlined/>
-                    Страницы ошибок/успеха
+                    <span>Страницы ошибок/успеха</span>
                 </span>
             </template>
             <a-menu-item key="/error/success">

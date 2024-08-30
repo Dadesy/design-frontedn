@@ -1,5 +1,5 @@
 <template>
-    <a-card class="rounded-none">
+    <a-card class="rounded-none border-l-0">
         <a-flex justify="space-between" align="center">
             <div class="font-semibold text-xl">{{title}}</div>
 
