@@ -1,48 +1,44 @@
 <template>
-
-    <div v-if="isMobile">
-      <div v-for="record in loading ? skeletonDataSource : filteredDataSource" :key="record.key" class="card">
-        <div class="card-header">
-          <h3>{{ record.name }}</h3>
-          <p><strong>Возраст:</strong> {{ record.age }}</p>
-        </div>
-        <div class="card-body">
-          <p><strong>Адрес:</strong> {{ record.address }}</p>
-          <p><strong>Профессия:</strong> {{ record.profession }}</p>
-          <p><strong>Компания:</strong> {{ record.company }}</p>
-          <p><strong>Email:</strong> {{ record.email }}</p>
-          <div v-if="editableData[record.key]" class="card-switches">
-            <a-checkbox
-                v-model:checked="editableData[record.key].checkbox"
-                class="card-checkbox"
-            >
-              Включить
-            </a-checkbox>
-            <a-switch
-                v-model:checked="editableData[record.key].switch"
-                class="card-switch"
-            />
-          </div>
-        </div>
-        <div class="card-footer editable-row-operations">
-          <a-button type="link" @click="openEditModal(record)">Редактировать</a-button>
-          <a-popconfirm
-              title="Вы уверены, что хотите удалить эту запись?"
-              @confirm="deleteRow(record.key)"
-              okText="Да"
-              cancelText="Нет"
-          >
-            <a-button type="link">Удалить</a-button>
-          </a-popconfirm>
+  <div class="switch">
+    <a-switch v-model:checked="loading" />
+    <p>Прогрузка таблицы</p>
+  </div>
+  <div class="switch">
+    <a-switch v-model:checked="card" />
+    <p>Отображение карточками</p>
+  </div>
+  <div v-show="isMobile || card" class="card-container">
+    <div v-for="record in loading ? skeletonDataSource : filteredDataSource" :key="record.key" class="card">
+      <div class="card-header">
+        <h3>{{ record.name }}</h3>
+        <p><strong>Возраст:</strong> {{ record.age }}</p>
+      </div>
+      <div class="card-body">
+        <p><strong>Адрес:</strong> {{ record.address }}</p>
+        <p><strong>Профессия:</strong> {{ record.profession }}</p>
+        <p><strong>Компания:</strong> {{ record.company }}</p>
+        <p><strong>Email:</strong> {{ record.email }}</p>
+        <div v-if="editableData[record.key]" class="card-switches">
+          <a-checkbox v-model:checked="editableData[record.key].checkbox" class="card-checkbox">
+            Включить
+          </a-checkbox>
+          <a-switch v-model:checked="editableData[record.key].switch" class="card-switch" />
         </div>
       </div>
+      <div class="card-footer editable-row-operations">
+        <a-button type="link" @click="openEditModal(record)">Редактировать</a-button>
+        <a-popconfirm
+            title="Вы уверены, что хотите удалить эту запись?"
+            @confirm="deleteRow(record.key)"
+            okText="Да"
+            cancelText="Нет"
+        >
+          <a-button type="link">Удалить</a-button>
+        </a-popconfirm>
+      </div>
     </div>
-  <div v-else>
-    <div class="switch">
-      <a-switch v-model:checked="loading" />
-      <p>Прогрузка таблицы</p>
-    </div>
-
+  </div>
+  <div v-show="!(isMobile || card)">
     <a-table
         class="lazy-scroll"
         :columns="columns"
@@ -194,7 +190,7 @@
 
 <script lang="ts" setup>
 import { cloneDeep } from 'lodash';
-import { reactive, ref, onMounted, computed, onBeforeUnmount } from 'vue';
+import { reactive, ref, onMounted, onBeforeUnmount } from 'vue';
 import { SearchOutlined } from '@ant-design/icons-vue';
 import { message } from 'ant-design-vue';
 import type { UnwrapRef } from 'vue';
@@ -219,6 +215,7 @@ const currentPage = ref<number>(1);
 const pageSize = 20;
 const hasMoreData = ref<boolean>(true);
 const loadingMore = ref<boolean>(false);
+const card =  ref<boolean>(false);
 
 const isMobile = ref<boolean>(window.innerWidth <= 768);
 
@@ -487,28 +484,24 @@ const handleScroll = () => {
 </script>
 
 <style scoped>
-.editable-row-operations {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.editable-row-operations a-button {
-  margin-right: 8px;
-}
-
 .switch {
   padding: 10px 20px;
   display: flex;
   gap: 10px;
 }
 
-/* Новые стили карточек */
+/* Контейнер для карточек */
+.card-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 16px;
+}
+
+/* Стили для карточек */
 .card {
   border: 1px solid #dfe1e5;
   border-radius: 12px;
   padding: 24px;
-  margin-bottom: 20px;
   background-color: #ffffff;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -574,28 +567,22 @@ const handleScroll = () => {
   padding-top: 16px;
 }
 
-@media (min-width: 769px) {
-  .card {
-    display: none;
-  }
-}
-
 @media (max-width: 768px) {
-  .lazy-scroll {
-    display: none;
+  .card-container {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   }
 
   .card {
-    padding: 24px;
-    margin: 16px 0;
+    padding: 16px;
+    margin: 8px 0;
   }
 
   .card-header h3 {
-    font-size: 1.75rem;
+    font-size: 1.25rem;
   }
 
   .card-body p {
-    font-size: 1.2rem;
+    font-size: 0.9rem;
   }
 }
 </style>
