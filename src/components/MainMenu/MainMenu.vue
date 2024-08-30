@@ -62,12 +62,15 @@
                 <span>Ошибка отправки</span>
             </a-menu-item>
         </a-sub-menu>
-
+        <a-menu-item key="/warningForm">
+          <appstore-outlined />
+          <span>Предупреждающие окна</span>
+        </a-menu-item>
     </a-menu>
 </template>
 
 <script setup lang="ts">
-import {FormOutlined, WarningOutlined, TableOutlined, CalendarOutlined} from "@ant-design/icons-vue";
+import {FormOutlined, WarningOutlined, AppstoreOutlined, TableOutlined, CalendarOutlined} from "@ant-design/icons-vue";
 import {ref} from 'vue';
 import {useRouter} from "vue-router";
 
