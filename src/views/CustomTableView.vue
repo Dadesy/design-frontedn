@@ -1,9 +1,47 @@
 <template>
-  <div>
-      <div class="switch">
-        <a-switch v-model:checked="loading" />
-         <p>Прогрузка таблицы</p>
+
+    <div v-if="isMobile">
+      <div v-for="record in loading ? skeletonDataSource : filteredDataSource" :key="record.key" class="card">
+        <div class="card-header">
+          <h3>{{ record.name }}</h3>
+          <p><strong>Возраст:</strong> {{ record.age }}</p>
+        </div>
+        <div class="card-body">
+          <p><strong>Адрес:</strong> {{ record.address }}</p>
+          <p><strong>Профессия:</strong> {{ record.profession }}</p>
+          <p><strong>Компания:</strong> {{ record.company }}</p>
+          <p><strong>Email:</strong> {{ record.email }}</p>
+          <div v-if="editableData[record.key]" class="card-switches">
+            <a-checkbox
+                v-model:checked="editableData[record.key].checkbox"
+                class="card-checkbox"
+            >
+              Включить
+            </a-checkbox>
+            <a-switch
+                v-model:checked="editableData[record.key].switch"
+                class="card-switch"
+            />
+          </div>
+        </div>
+        <div class="card-footer editable-row-operations">
+          <a-button type="link" @click="openEditModal(record)">Редактировать</a-button>
+          <a-popconfirm
+              title="Вы уверены, что хотите удалить эту запись?"
+              @confirm="deleteRow(record.key)"
+              okText="Да"
+              cancelText="Нет"
+          >
+            <a-button type="link">Удалить</a-button>
+          </a-popconfirm>
+        </div>
       </div>
+    </div>
+  <div v-else>
+    <div class="switch">
+      <a-switch v-model:checked="loading" />
+      <p>Прогрузка таблицы</p>
+    </div>
 
     <a-table
         class="lazy-scroll"
@@ -102,57 +140,61 @@
         </div>
       </template>
     </a-table>
-
-    <a-modal
-        v-model:visible="isModalVisible"
-        title="Редактирование записи"
-        @ok="save(editingKey)"
-        @cancel="closeEditModal"
-    >
-      <a-form-item label="Имя" v-if="editingKey && editableData[editingKey]">
-        <a-input
-            v-model:value="editableData[editingKey].name"
-            :disabled="!isEditing"
-        />
-      </a-form-item>
-      <a-form-item label="Возраст" v-if="editingKey && editableData[editingKey]">
-        <a-input-number
-            v-model:value="editableData[editingKey].age"
-            :disabled="!isEditing"
-            :min="0"
-        />
-      </a-form-item>
-      <a-form-item label="Адрес" v-if="editingKey && editableData[editingKey]">
-        <a-select
-            v-model:value="editableData[editingKey].address"
-            :disabled="!isEditing"
-        >
-          <a-select-option value="Центральный парк">Центральный парк</a-select-option>
-          <a-select-option value="Парк на Краснопресненской набережной">Парк на Краснопресненской набережной</a-select-option>
-          <a-select-option value="Парк Горького">Парк Горького</a-select-option>
-        </a-select>
-      </a-form-item>
-      <a-form-item v-if="editingKey && editableData[editingKey]">
-        <a-checkbox
-            v-model:checked="editableData[editingKey].checkbox"
-            :disabled="!isEditing"
-        >
-          Включить
-        </a-checkbox>
-      </a-form-item>
-      <a-form-item v-if="editingKey && editableData[editingKey]">
-        <a-switch
-            v-model:checked="editableData[editingKey].switch"
-            :disabled="!isEditing"
-        />
-      </a-form-item>
-    </a-modal>
   </div>
+
+  <a-modal
+      v-model:visible="isModalVisible"
+      title="Редактирование записи"
+      @ok="save(editingKey)"
+      @cancel="closeEditModal"
+  >
+    <a-form-item label="Имя" v-if="editingKey && editableData[editingKey]">
+      <a-input
+          v-model:value="editableData[editingKey].name"
+          :disabled="!isEditing"
+      />
+    </a-form-item>
+    <a-form-item label="Возраст" v-if="editingKey && editableData[editingKey]">
+      <a-input-number
+          v-model:value="editableData[editingKey].age"
+          :disabled="!isEditing"
+          :min="0"
+      />
+    </a-form-item>
+    <a-form-item label="Адрес" v-if="editingKey && editableData[editingKey]">
+      <a-select
+          v-model:value="editableData[editingKey].address"
+          :disabled="!isEditing"
+      >
+        <a-select-option value="Центральный парк">Центральный парк</a-select-option>
+        <a-select-option value="Парк на Краснопресненской набережной">Парк на Краснопресненской набережной</a-select-option>
+        <a-select-option value="Парк Горького">Парк Горького</a-select-option>
+      </a-select>
+    </a-form-item>
+    <a-form-item label="Профессия" v-if="editingKey && editableData[editingKey]">
+      <a-input
+          v-model:value="editableData[editingKey].profession"
+          :disabled="!isEditing"
+      />
+    </a-form-item>
+    <a-form-item label="Компания" v-if="editingKey && editableData[editingKey]">
+      <a-input
+          v-model:value="editableData[editingKey].company"
+          :disabled="!isEditing"
+      />
+    </a-form-item>
+    <a-form-item label="Email" v-if="editingKey && editableData[editingKey]">
+      <a-input
+          v-model:value="editableData[editingKey].email"
+          :disabled="!isEditing"
+      />
+    </a-form-item>
+  </a-modal>
 </template>
 
 <script lang="ts" setup>
 import { cloneDeep } from 'lodash';
-import { reactive, ref, onMounted } from 'vue';
+import { reactive, ref, onMounted, computed, onBeforeUnmount } from 'vue';
 import { SearchOutlined } from '@ant-design/icons-vue';
 import { message } from 'ant-design-vue';
 import type { UnwrapRef } from 'vue';
@@ -162,6 +204,9 @@ interface DataItem {
   name: string;
   age: number;
   address: string;
+  profession: string;
+  company: string;
+  email: string;
   checkbox: boolean;
   switch: boolean;
 }
@@ -175,12 +220,29 @@ const pageSize = 20;
 const hasMoreData = ref<boolean>(true);
 const loadingMore = ref<boolean>(false);
 
+const isMobile = ref<boolean>(window.innerWidth <= 768);
+
+const handleResize = () => {
+  isMobile.value = window.innerWidth <= 768;
+};
+
+onMounted(() => {
+  window.addEventListener('resize', handleResize);
+  loadData();
+  const table = document.querySelector('.ant-table-body');
+  table?.addEventListener('scroll', handleScroll);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', handleResize);
+});
+
 const columns = [
   {
     title: 'Имя',
     dataIndex: 'name',
     key: 'name',
-    width: '20%',
+    width: '15%',
     sorter: (a: DataItem, b: DataItem) => a.name.localeCompare(b.name),
     filters: [
       { text: 'Иван', value: 'Иван' },
@@ -206,7 +268,7 @@ const columns = [
     title: 'Адрес',
     dataIndex: 'address',
     key: 'address',
-    width: '30%',
+    width: '20%',
     sorter: (a: DataItem, b: DataItem) => a.address.localeCompare(b.address),
     filters: [
       { text: 'Центральный парк', value: 'Центральный парк' },
@@ -216,21 +278,42 @@ const columns = [
     onFilter: (value: string, record: DataItem) => record.address.includes(value),
   },
   {
+    title: 'Профессия',
+    dataIndex: 'profession',
+    key: 'profession',
+    width: '15%',
+    sorter: (a: DataItem, b: DataItem) => a.profession.localeCompare(b.profession),
+  },
+  {
+    title: 'Компания',
+    dataIndex: 'company',
+    key: 'company',
+    width: '15%',
+    sorter: (a: DataItem, b: DataItem) => a.company.localeCompare(b.company),
+  },
+  {
+    title: 'Email',
+    dataIndex: 'email',
+    key: 'email',
+    width: '25%',
+  },
+  {
     title: 'Чекбокс',
     dataIndex: 'checkbox',
     key: 'checkbox',
-    width: '15%',
+    width: '10%',
   },
   {
     title: 'Переключатель',
     dataIndex: 'switch',
     key: 'switch',
-    width: '15%',
+    width: '10%',
   },
   {
     title: 'Операции',
     dataIndex: 'operation',
     key: 'operation',
+    width: '15%',
   },
 ];
 
@@ -241,6 +324,9 @@ for (let i = 0; i < 100; i++) {
     name: `Иван ${i}`,
     age: 32 + (i % 3) * 10,
     address: `Центральный парк ${i}`,
+    profession: `Профессия ${i}`,
+    company: `Компания ${i}`,
+    email: `ivan${i}@example.com`,
     checkbox: i % 2 === 0,
     switch: i % 2 === 0,
   });
@@ -253,6 +339,9 @@ for (let i = 0; i < 10; i++) {
     name: '',
     age: 0,
     address: '',
+    profession: '',
+    company: '',
+    email: '',
     checkbox: false,
     switch: false,
   });
@@ -326,6 +415,10 @@ const handleTableChange = (
         return order * (a.age - b.age);
       } else if (sorter.field === 'address') {
         return order * a.address.localeCompare(b.address);
+      } else if (sorter.field === 'profession') {
+        return order * a.profession.localeCompare(b.profession);
+      } else if (sorter.field === 'company') {
+        return order * a.company.localeCompare(b.company);
       }
       return 0;
     });
@@ -362,6 +455,9 @@ const loadData = async () => {
         name: `Иван ${index}`,
         age: 25 + (index % 3) * 10,
         address: `Центральный парк ${index}`,
+        profession: `Профессия ${index}`,
+        company: `Компания ${index}`,
+        email: `ivan${index}@example.com`,
         checkbox: index % 2 === 0,
         switch: index % 2 === 0,
       });
@@ -388,17 +484,12 @@ const handleScroll = () => {
     }
   }
 };
-
-onMounted(() => {
-  loadData();
-  const table = document.querySelector('.ant-table-body');
-  table?.addEventListener('scroll', handleScroll);
-});
 </script>
 
 <style scoped>
 .editable-row-operations {
   display: flex;
+  justify-content: space-between;
   align-items: center;
 }
 
@@ -412,4 +503,99 @@ onMounted(() => {
   gap: 10px;
 }
 
+/* Новые стили карточек */
+.card {
+  border: 1px solid #dfe1e5;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 20px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  border-bottom: 2px solid #f1f3f4;
+  padding-bottom: 16px;
+}
+
+.card-header h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #202124;
+}
+
+.card-header p {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #5f6368;
+}
+
+.card-body {
+  margin-bottom: 16px;
+  line-height: 1.6;
+}
+
+.card-body p {
+  margin: 0 0 8px;
+  font-size: 1rem;
+  color: #3c4043;
+}
+
+.card-switches {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-top: 16px;
+}
+
+.card-checkbox {
+  font-size: 1rem;
+  color: #202124;
+}
+
+.card-switch {
+  font-size: 1rem;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: flex-end;
+  border-top: 2px solid #f1f3f4;
+  padding-top: 16px;
+}
+
+@media (min-width: 769px) {
+  .card {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .lazy-scroll {
+    display: none;
+  }
+
+  .card {
+    padding: 24px;
+    margin: 16px 0;
+  }
+
+  .card-header h3 {
+    font-size: 1.75rem;
+  }
+
+  .card-body p {
+    font-size: 1.2rem;
+  }
+}
 </style>
