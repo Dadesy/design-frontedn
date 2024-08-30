@@ -1,6 +1,7 @@
 <template>
   <a-page-header
-      style="padding: 16px;"
+      class="p-[16px]"
+      :ghost="false"
       title="ЭФКО дизайн"
       :breadcrumb="{ routes: breadcrumbRoutes }"
   >
