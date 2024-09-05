@@ -11,6 +11,7 @@ import Page404View from "@/views/Page404View.vue";
 import Page500View from "@/views/Page500View.vue";
 import SubmissionFailedPageView from "@/views/SubmissionFailedPageView.vue";
 import GreatPageView from "@/views/GreatPageView.vue";
+import WarningFormView from "@/views/WarningWindowForm.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -128,7 +129,16 @@ const router = createRouter({
       meta: {
         breadcrumbName: 'Календарь'
       }
+    },
+    {
+      path: '/warningForm',
+      name: 'warningForm',
+      component: WarningFormView,
+      meta: {
+        breadcrumbName: 'Предупреждающие окна'
+      }
     }
+
   ]
 });
 
