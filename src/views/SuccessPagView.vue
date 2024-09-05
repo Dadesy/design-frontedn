@@ -1,4 +1,5 @@
 <template>
+    <page-title title="Успешно" />
     <div class="p-5 error-page-example">
         <a-card class="w-full">
             <a-result
@@ -14,3 +15,6 @@
         </a-card>
     </div>
 </template>
+<script setup>
+import PageTitle from '@/components/PageTitle/PageTitle.vue';
+</script>

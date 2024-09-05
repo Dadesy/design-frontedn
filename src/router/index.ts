@@ -27,7 +27,7 @@ const router = createRouter({
       path: '/table',
       name: 'table',
       meta: {
-        breadcrumbName: 'Таблицы'
+        breadcrumbName: 'Таблица'
       },
       children: [
         {
@@ -51,7 +51,7 @@ const router = createRouter({
           name: 'customTable',
           component: CustomTableView,
           meta: {
-            breadcrumbName: 'Таблица с модальным окном таблица'
+            breadcrumbName: 'Таблица с модальным окном'
           }
         }
       ]

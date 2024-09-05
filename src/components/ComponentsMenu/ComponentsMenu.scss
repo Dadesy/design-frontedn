@@ -1,0 +1,7 @@
+.ant-menu-title-content {
+  @apply flex items-center;
+}
+
+.ant-layout-sider-children .components-menu.ant-menu {
+  border-inline-end: unset;
+}

@@ -1,11 +1,8 @@
 <template>
-  <div>
-    <a-table
-        :columns="columns"
-        :data-source="loading ? skeletonDataSource : filteredDataSource"
-        bordered
-        @change="handleTableChange"
-    >
+  <page-title title="Расширенная таблица" />
+  <div class="p-5">
+    <a-table :columns="columns" :data-source="loading ? skeletonDataSource : filteredDataSource" bordered
+      @change="handleTableChange">
       <template #bodyCell="{ column, text, record }">
         <template v-if="loading">
           <a-skeleton :active="true" :loading="loading" :title="false" :paragraph="{ rows: 1 }"></a-skeleton>
@@ -14,32 +11,21 @@
           <template v-if="['name', 'age', 'address', 'checkbox', 'switch'].includes(column.dataIndex)">
             <div>
               <template v-if="editableData[record.key]">
-                <a-select
-                    v-if="column.dataIndex === 'address'"
-                    v-model:value="editableData[record.key][column.dataIndex as 'address']"
-                    style="width: 100%; margin: -5px 0"
-                >
+                <a-select v-if="column.dataIndex === 'address'"
+                  v-model:value="editableData[record.key][column.dataIndex as 'address']"
+                  style="width: 100%; margin: -5px 0">
                   <a-select-option value="London Park">London Park</a-select-option>
                   <a-select-option value="New York Park">New York Park</a-select-option>
                   <a-select-option value="San Francisco Park">San Francisco Park</a-select-option>
                 </a-select>
-                <a-input
-                    v-else-if="['name', 'age'].includes(column.dataIndex)"
-                    v-model:value="editableData[record.key][column.dataIndex as 'name' | 'age']"
-                    style="margin: -5px 0"
-                />
-                <a-checkbox
-                    v-else-if="column.dataIndex === 'checkbox'"
-                    v-model:checked="editableData[record.key][column.dataIndex as 'checkbox']"
-                    style="margin: -5px 0"
-                >
+                <a-input v-else-if="['name', 'age'].includes(column.dataIndex)"
+                  v-model:value="editableData[record.key][column.dataIndex as 'name' | 'age']" style="margin: -5px 0" />
+                <a-checkbox v-else-if="column.dataIndex === 'checkbox'"
+                  v-model:checked="editableData[record.key][column.dataIndex as 'checkbox']" style="margin: -5px 0">
                   Включить
                 </a-checkbox>
-                <a-switch
-                    v-else-if="column.dataIndex === 'switch'"
-                    v-model:checked="editableData[record.key][column.dataIndex as 'switch']"
-                    style="margin: -5px 0"
-                />
+                <a-switch v-else-if="column.dataIndex === 'switch'"
+                  v-model:checked="editableData[record.key][column.dataIndex as 'switch']" style="margin: -5px 0" />
               </template>
               <template v-else>
                 <template v-if="column.dataIndex === 'checkbox'">
@@ -69,12 +55,8 @@
                         Редактировать
                       </a-menu-item>
                       <a-menu-item>
-                        <a-popconfirm
-                            title="Вы уверены, что хотите удалить эту запись?"
-                            @confirm="deleteRow(record.key)"
-                            okText="Да"
-                            cancelText="Нет"
-                        >
+                        <a-popconfirm title="Вы уверены, что хотите удалить эту запись?"
+                          @confirm="deleteRow(record.key)" okText="Да" cancelText="Нет">
                           Удалить
                         </a-popconfirm>
                       </a-menu-item>
@@ -88,21 +70,15 @@
       </template>
       <template #customFilterDropdown="{ setSelectedKeys, selectedKeys, confirm, clearFilters, column }">
         <div style="padding: 8px">
-          <a-input
-              ref="searchInput"
-              :placeholder="`Search ${column.dataIndex}`"
-              :value="selectedKeys[0]"
-              style="width: 188px; margin-bottom: 8px; display: block"
-              @change="(e: Event) => setSelectedKeys((e.target as HTMLInputElement).value ? [(e.target as HTMLInputElement).value] : [])"
-              @pressEnter="handleSearch(selectedKeys, confirm, column.dataIndex)"
-          />
-          <a-button
-              type="primary"
-              size="small"
-              style="width: 90px; margin-right: 8px"
-              @click="handleSearch(selectedKeys, confirm, column.dataIndex)"
-          >
-            <template #icon><SearchOutlined /></template>
+          <a-input ref="searchInput" :placeholder="`Search ${column.dataIndex}`" :value="selectedKeys[0]"
+            style="width: 188px; margin-bottom: 8px; display: block"
+            @change="(e: Event) => setSelectedKeys((e.target as HTMLInputElement).value ? [(e.target as HTMLInputElement).value] : [])"
+            @pressEnter="handleSearch(selectedKeys, confirm, column.dataIndex)" />
+          <a-button type="primary" size="small" style="width: 90px; margin-right: 8px"
+            @click="handleSearch(selectedKeys, confirm, column.dataIndex)">
+            <template #icon>
+              <SearchOutlined />
+            </template>
             Search
           </a-button>
           <a-button size="small" style="width: 90px" @click="handleReset(clearFilters)">
@@ -124,6 +100,7 @@ import { SearchOutlined } from '@ant-design/icons-vue';
 import { message } from 'ant-design-vue';
 import type { TableColumnType } from 'ant-design-vue';
 import type { Key } from 'ant-design-vue/es/table/interface';
+import PageTitle from '@/components/PageTitle/PageTitle.vue';
 
 type ColumnDataIndex = string;
 
@@ -305,8 +282,8 @@ const deleteRow = (key: Key) => {
 };
 
 const handleTableChange = (
-    filters: Record<string, (string | number | boolean)[] | null>,
-    sorter: any
+  filters: Record<string, (string | number | boolean)[] | null>,
+  sorter: any
 ) => {
   let filteredData = [...dataSource.value];
 
@@ -338,9 +315,9 @@ const handleTableChange = (
 };
 
 const handleSearch = (
-    selectedKeys: string[],
-    confirm: () => void,
-    dataIndex: string
+  selectedKeys: string[],
+  confirm: () => void,
+  dataIndex: string
 ) => {
   confirm();
   state.searchText = selectedKeys[0];

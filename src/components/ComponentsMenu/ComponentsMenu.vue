@@ -4,27 +4,28 @@
         v-model:openKeys="openKeys"
         mode="inline"
         @click="handleMenuClick"
+        class="components-menu"
     >
         <a-menu-item key="/">
             <form-outlined/>
-            <span>Пример формы</span>
+            <span>Форма</span>
         </a-menu-item>
 
         <a-sub-menu key="/table">
             <template #title>
                 <span>
                     <table-outlined/>
-                    <span>Пример таблицы</span>
+                    <span>Таблица</span>
                 </span>
             </template>
             <a-menu-item key="/table/basic">
-                <span>Базовая таблица</span>
+                <span>Базовая</span>
             </a-menu-item>
             <a-menu-item key="/table/advanced">
-                <span>Расширенная таблица</span>
+                <span>Расширенная</span>
             </a-menu-item>
             <a-menu-item key="/table/custom">
-                <span>Таблица с модальным окном</span>
+                <span>С модальным окном</span>
             </a-menu-item>
         </a-sub-menu>
 
@@ -37,7 +38,7 @@
             <template #title>
                 <span>
                     <warning-outlined/>
-                    <span>Страницы ошибок/успеха</span>
+                    <span>Ошибки/успех</span>
                 </span>
             </template>
             <a-menu-item key="/error/success">
@@ -72,7 +73,7 @@ import {ref} from 'vue';
 import {useRouter} from "vue-router";
 
 const selectedKeys2 = ref<string[]>(['/']);
-const openKeys = ref<string[]>(['/table']);
+const openKeys = ref<string[]>(['']);
 
 const router = useRouter();
 
@@ -81,4 +82,4 @@ function handleMenuClick(event: { key: string }) {
 }
 </script>
 
-<style src="./MainMenu.scss"></style>
+<style src="./ComponentsMenu.scss"></style>

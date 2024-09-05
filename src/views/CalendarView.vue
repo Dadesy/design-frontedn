@@ -1,22 +1,26 @@
 <template>
-  <a-calendar v-model:value="value">
-    <template #dateCellRender="{ current }">
-      <ul class="events">
-        <li v-for="item in getListData(current)" :key="item.content">
-          <a-badge :status="item.type" :text="item.content" />
-        </li>
-      </ul>
-    </template>
-    <template #monthCellRender="{ current }">
-      <div v-if="getMonthData(current)" class="notes-month">
-        <section>{{ getMonthData(current) }}</section>
-        <span>Backlog number</span>
-      </div>
-    </template>
-  </a-calendar>
+  <page-title title="Календарь событий" />
+  <div class="p-5">
+    <a-calendar v-model:value="value">
+      <template #dateCellRender="{ current }">
+        <ul class="events">
+          <li v-for="item in getListData(current)" :key="item.content">
+            <a-badge :status="item.type" :text="item.content" />
+          </li>
+        </ul>
+      </template>
+      <template #monthCellRender="{ current }">
+        <div v-if="getMonthData(current)" class="notes-month">
+          <section>{{ getMonthData(current) }}</section>
+          <span>Backlog number</span>
+        </div>
+      </template>
+    </a-calendar>
+  </div>
 </template>
 <script lang="ts" setup>
 import { ref } from 'vue';
+import PageTitle from '@/components/PageTitle/PageTitle.vue';
 import { Dayjs } from 'dayjs';
 const value = ref<Dayjs>();
 
@@ -63,6 +67,7 @@ const getMonthData = (value: Dayjs) => {
   margin: 0;
   padding: 0;
 }
+
 .events .ant-badge-status {
   overflow: hidden;
   white-space: nowrap;
@@ -70,10 +75,12 @@ const getMonthData = (value: Dayjs) => {
   text-overflow: ellipsis;
   font-size: 12px;
 }
+
 .notes-month {
   text-align: center;
   font-size: 28px;
 }
+
 .notes-month section {
   font-size: 28px;
 }

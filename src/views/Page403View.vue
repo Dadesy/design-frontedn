@@ -1,4 +1,5 @@
 <template>
+    <page-title title="403 ошибка доступа" />
     <div class="p-5 error-page-example">
         <a-card class="w-full">
             <a-result status="403" title="403" sub-title="К сожалению, у вас нет прав доступа к этой странице.">
@@ -9,3 +10,6 @@
         </a-card>
     </div>
 </template>
+<script setup>
+import PageTitle from '@/components/PageTitle/PageTitle.vue';
+</script>

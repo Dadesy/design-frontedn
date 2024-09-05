@@ -1,65 +1,34 @@
 <template>
-  <div>
-      <div class="switch">
-        <a-switch v-model:checked="loading" />
-         <p>Прогрузка таблицы</p>
-      </div>
+  <page-title title="Прогрузка таблицы" />
+  <div class="p-5">
+    <div class="switch">
+      <a-switch v-model:checked="loading" />
+      <p>Прогрузка таблицы</p>
+    </div>
 
-    <a-table
-        class="lazy-scroll"
-        :columns="columns"
-        :data-source="loading ? skeletonDataSource : filteredDataSource"
-        bordered
-        @change="handleTableChange"
-        :pagination="false"
-        :scroll="{ x: 'max-content', y: 'calc(100vh - 300px)' }"
-        ref="table"
-    >
+    <a-table class="lazy-scroll" :columns="columns" :data-source="loading ? skeletonDataSource : filteredDataSource"
+      bordered @change="handleTableChange" :pagination="false" :scroll="{ x: 'max-content', y: 'calc(100vh - 300px)' }"
+      ref="table">
       <template #bodyCell="{ column, text, record }">
         <template v-if="loading">
-          <a-skeleton
-              :active="true"
-              :loading="loading"
-              :title="false"
-              :paragraph="{ rows: 1 }"
-          ></a-skeleton>
+          <a-skeleton :active="true" :loading="loading" :title="false" :paragraph="{ rows: 1 }"></a-skeleton>
         </template>
         <template v-else>
           <template v-if="['checkbox', 'switch'].includes(column.dataIndex)">
             <div>
-              <template v-if="editableData[record.key]">
-                <a-checkbox
-                    v-if="column.dataIndex === 'checkbox'"
-                    v-model:checked="editableData[record.key][column.dataIndex as 'checkbox']"
-                    style="margin: -5px 0"
-                >
-                  Включить
-                </a-checkbox>
-                <a-switch
-                    v-else
-                    v-model:checked="editableData[record.key][column.dataIndex as 'switch']"
-                    style="margin: -5px 0"
-                />
-              </template>
-              <template v-else>
                 <template v-if="column.dataIndex === 'checkbox'">
                   {{ text ? 'Включено' : 'Выключено' }}
                 </template>
                 <template v-else-if="column.dataIndex === 'switch'">
                   {{ text ? 'Включено' : 'Выключено' }}
                 </template>
-              </template>
             </div>
           </template>
           <template v-else-if="column.dataIndex === 'operation'">
             <div class="editable-row-operations">
-              <a-button type="link" @click="openEditModal(record)">Редактировать</a-button>
-              <a-popconfirm
-                  title="Вы уверены, что хотите удалить эту запись?"
-                  @confirm="deleteRow(record.key)"
-                  okText="Да"
-                  cancelText="Нет"
-              >
+              <a-button type="link" @click="openEditModal(record)" class="pl-0">Редактировать</a-button>
+              <a-popconfirm title="Вы уверены, что хотите удалить эту запись?" @confirm="deleteRow(record.key)"
+                okText="Да" cancelText="Нет">
                 <a-button type="link">Удалить</a-button>
               </a-popconfirm>
             </div>
@@ -71,21 +40,15 @@
       </template>
       <template #customFilterDropdown="{ setSelectedKeys, selectedKeys, confirm, clearFilters, column }">
         <div style="padding: 8px">
-          <a-input
-              ref="searchInput"
-              :placeholder="`Поиск по ${column.dataIndex}`"
-              :value="selectedKeys[0]"
-              style="width: 188px; margin-bottom: 8px; display: block"
-              @change="(e: any) => setSelectedKeys(e.target.value ? [e.target.value] : [])"
-              @pressEnter="handleSearch(selectedKeys, confirm, column.dataIndex)"
-          />
-          <a-button
-              type="primary"
-              size="small"
-              style="width: 90px; margin-right: 8px"
-              @click="handleSearch(selectedKeys, confirm, column.dataIndex)"
-          >
-            <template #icon><SearchOutlined /></template>
+          <a-input ref="searchInput" :placeholder="`Поиск по ${column.dataIndex}`" :value="selectedKeys[0]"
+            style="width: 188px; margin-bottom: 8px; display: block"
+            @change="(e: any) => setSelectedKeys(e.target.value ? [e.target.value] : [])"
+            @pressEnter="handleSearch(selectedKeys, confirm, column.dataIndex)" />
+          <a-button type="primary" size="small" style="width: 90px; margin-right: 8px"
+            @click="handleSearch(selectedKeys, confirm, column.dataIndex)">
+            <template #icon>
+              <SearchOutlined />
+            </template>
             Поиск
           </a-button>
           <a-button size="small" style="width: 90px" @click="handleReset(clearFilters)">
@@ -103,48 +66,29 @@
       </template>
     </a-table>
 
-    <a-modal
-        v-model:visible="isModalVisible"
-        title="Редактирование записи"
-        @ok="save(editingKey)"
-        @cancel="closeEditModal"
-    >
+    <a-modal v-model:visible="isModalVisible" title="Редактирование записи" @ok="save(editingKey)"
+      @cancel="closeEditModal(editingKey)">
       <a-form-item label="Имя" v-if="editingKey && editableData[editingKey]">
-        <a-input
-            v-model:value="editableData[editingKey].name"
-            :disabled="!isEditing"
-        />
+        <a-input v-model:value="editableData[editingKey].name" :disabled="!isEditing" />
       </a-form-item>
       <a-form-item label="Возраст" v-if="editingKey && editableData[editingKey]">
-        <a-input-number
-            v-model:value="editableData[editingKey].age"
-            :disabled="!isEditing"
-            :min="0"
-        />
+        <a-input-number v-model:value="editableData[editingKey].age" :disabled="!isEditing" :min="0" />
       </a-form-item>
       <a-form-item label="Адрес" v-if="editingKey && editableData[editingKey]">
-        <a-select
-            v-model:value="editableData[editingKey].address"
-            :disabled="!isEditing"
-        >
+        <a-select v-model:value="editableData[editingKey].address" :disabled="!isEditing">
           <a-select-option value="Центральный парк">Центральный парк</a-select-option>
-          <a-select-option value="Парк на Краснопресненской набережной">Парк на Краснопресненской набережной</a-select-option>
+          <a-select-option value="Парк на Краснопресненской набережной">Парк на Краснопресненской
+            набережной</a-select-option>
           <a-select-option value="Парк Горького">Парк Горького</a-select-option>
         </a-select>
       </a-form-item>
       <a-form-item v-if="editingKey && editableData[editingKey]">
-        <a-checkbox
-            v-model:checked="editableData[editingKey].checkbox"
-            :disabled="!isEditing"
-        >
+        <a-checkbox v-model:checked="editableData[editingKey].checkbox" :disabled="!isEditing">
           Включить
         </a-checkbox>
       </a-form-item>
       <a-form-item v-if="editingKey && editableData[editingKey]">
-        <a-switch
-            v-model:checked="editableData[editingKey].switch"
-            :disabled="!isEditing"
-        />
+        <a-switch v-model:checked="editableData[editingKey].switch" :disabled="!isEditing" />
       </a-form-item>
     </a-modal>
   </div>
@@ -156,6 +100,7 @@ import { reactive, ref, onMounted } from 'vue';
 import { SearchOutlined } from '@ant-design/icons-vue';
 import { message } from 'ant-design-vue';
 import type { UnwrapRef } from 'vue';
+import PageTitle from '@/components/PageTitle/PageTitle.vue';
 
 interface DataItem {
   key: string;
@@ -180,7 +125,7 @@ const columns = [
     title: 'Имя',
     dataIndex: 'name',
     key: 'name',
-    width: '20%',
+    width: '15%',
     sorter: (a: DataItem, b: DataItem) => a.name.localeCompare(b.name),
     filters: [
       { text: 'Иван', value: 'Иван' },
@@ -193,7 +138,7 @@ const columns = [
     title: 'Возраст',
     dataIndex: 'age',
     key: 'age',
-    width: '10%',
+    width: '15%',
     sorter: (a: DataItem, b: DataItem) => a.age - b.age,
     filters: [
       { text: '25', value: 25 },
@@ -271,16 +216,20 @@ const state = reactive({
 });
 
 const openEditModal = (record: DataItem) => {
-  editingKey.value = record.key;
   editableData[record.key] = cloneDeep(record);
+  editingKey.value = record.key;
   isEditing.value = true;
   isModalVisible.value = true;
 };
 
-const closeEditModal = () => {
-  isModalVisible.value = false;
+const closeEditModal = (key: string | null) => {
+  if (key) {
+    delete editableData[key];
+  }
+  
   editingKey.value = null;
   isEditing.value = false;
+  isModalVisible.value = false;
 };
 
 const save = (key: string | null) => {
@@ -288,10 +237,12 @@ const save = (key: string | null) => {
     const recordIndex = dataSource.value.findIndex(item => item.key === key);
     if (recordIndex !== -1) {
       dataSource.value[recordIndex] = cloneDeep(editableData[key]);
+      filteredDataSource.value[recordIndex] = cloneDeep(editableData[key]);
       message.success('Изменения сохранены');
     }
   }
-  closeEditModal();
+
+  closeEditModal(key);
 };
 
 const deleteRow = (key: string) => {
@@ -301,9 +252,9 @@ const deleteRow = (key: string) => {
 };
 
 const handleTableChange = (
-    pagination: any,
-    filters: Record<string, (string | number | boolean)[] | null>,
-    sorter: any
+  pagination: any,
+  filters: Record<string, (string | number | boolean)[] | null>,
+  sorter: any
 ) => {
   let filteredData = [...dataSource.value];
 
@@ -335,9 +286,9 @@ const handleTableChange = (
 };
 
 const handleSearch = (
-    selectedKeys: string[],
-    confirm: () => void,
-    dataIndex: string
+  selectedKeys: string[],
+  confirm: () => void,
+  dataIndex: string
 ) => {
   confirm();
   state.searchText = selectedKeys[0];
@@ -411,5 +362,4 @@ onMounted(() => {
   display: flex;
   gap: 10px;
 }
-
 </style>
