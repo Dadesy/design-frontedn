@@ -1,44 +1,48 @@
 <template>
-  <a-form
-      :model="formState"
-      :label-col="labelCol"
-      :wrapper-col="wrapperCol"
-      class="user-form"
-  >
-    <a-form-item label="Имя пользователя">
-      <a-input v-model:value="formState.username" placeholder="Введите имя пользователя" />
-    </a-form-item>
-    <a-form-item label="Email">
-      <a-input v-model:value="formState.email" type="email" placeholder="Введите email" />
-    </a-form-item>
-    <a-form-item label="Пароль">
-      <a-input v-model:value="formState.password" type="password" placeholder="Введите пароль" />
-    </a-form-item>
-    <a-form-item label="Подтверждение пароля">
-      <a-input v-model:value="formState.confirmPassword" type="password" placeholder="Подтвердите пароль" />
-    </a-form-item>
-    <a-form-item label="Роль пользователя">
-      <a-radio-group v-model:value="formState.role">
-        <a-radio value="admin">Администратор</a-radio>
-        <a-radio value="user">Пользователь</a-radio>
-        <a-radio value="guest">Гость</a-radio>
-      </a-radio-group>
-    </a-form-item>
-    <a-form-item label="Согласие с условиями">
-      <a-checkbox v-model:checked="formState.agreement">Я согласен с условиями использования</a-checkbox>
-    </a-form-item>
-    <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
-      <a-button type="primary" @click="onSubmit">Создать</a-button>
-      <a-button style="margin-left: 10px">Отмена</a-button>
-    </a-form-item>
-  </a-form>
+  <page-title title="Предупреждающее окно" />
+  <div class="p-5">
+    <a-card class="max-w-2xl mx-auto">
+      <a-form :model="formState" :label-col="labelCol" :wrapper-col="wrapperCol">
+        <a-form-item label="Имя пользователя">
+          <a-input v-model:value="formState.username" placeholder="Введите имя пользователя" />
+        </a-form-item>
+        <a-form-item label="Email">
+          <a-input v-model:value="formState.email" type="email" placeholder="Введите email" @blur="validateEmail"
+            :status="emailError ? 'error' : undefined" @input="emailInputHandler" />
+          <div v-if="emailError" class="text-red-500">{{ emailError }}</div>
+        </a-form-item>
+        <a-form-item label="Пароль">
+          <a-input-password v-model:value="formState.password" placeholder="Введите пароль" />
+        </a-form-item>
+        <a-form-item label="Подтверждение пароля">
+          <a-input-password v-model:value="formState.confirmPassword" placeholder="Подтвердите пароль" />
+        </a-form-item>
+        <a-form-item label="Роль пользователя">
+          <a-radio-group v-model:value="formState.role">
+            <a-radio value="admin">Администратор</a-radio>
+            <a-radio value="user">Пользователь</a-radio>
+            <a-radio value="guest">Гость</a-radio>
+          </a-radio-group>
+        </a-form-item>
+        <a-form-item label="Согласие с условиями">
+          <a-checkbox v-model:checked="formState.agreement">Я согласен с условиями использования</a-checkbox>
+        </a-form-item>
+        <a-form-item :wrapper-col="{ span: 14, offset: 4 }" class="text-center">
+          <a-button type="primary" @click="onSubmit">Создать</a-button>
+          <a-button style="margin-left: 10px">Отмена</a-button>
+        </a-form-item>
+      </a-form>
+    </a-card>
+  </div>
 </template>
 
 <script lang="ts" setup>
-import { reactive, toRaw, onBeforeUnmount, watch, onMounted } from 'vue';
+import { reactive, toRaw, onBeforeUnmount, watch, onMounted, ref } from 'vue';
 import { Modal } from 'ant-design-vue';
 import type { UnwrapRef } from 'vue';
-import { useRouter, onBeforeRouteLeave } from 'vue-router';
+import { onBeforeRouteLeave } from 'vue-router';
+import PageTitle from '@/components/PageTitle/PageTitle.vue';
+import { EMAIL_PATTERN } from '@/constants/regexp';
 
 interface FormState {
   username: string;
@@ -58,9 +62,25 @@ const formState: UnwrapRef<FormState> = reactive({
   agreement: false,
 });
 
+let emailError = ref<string | null>('');
+
 const isFormDirty = () => {
   return formState.username || formState.email || formState.password || formState.confirmPassword || formState.role || formState.agreement;
 };
+
+function validateEmail(e: InputEvent) {
+  const value = (e.target as HTMLInputElement).value;
+  if (value.length > 0) {
+    emailError.value = EMAIL_PATTERN.test(value) ? null : 'Некорректный email';
+    return;
+  }
+
+  emailError.value = null;
+}
+
+function emailInputHandler() {
+  emailError.value = null;
+}
 
 const onSubmit = () => {
   if (formState.password !== formState.confirmPassword) {
@@ -120,11 +140,11 @@ onBeforeUnmount(() => {
 });
 
 watch(
-    () => formState,
-    () => {
-      saved = false;
-    },
-    { deep: true }
+  () => formState,
+  () => {
+    saved = false;
+  },
+  { deep: true }
 );
 
 const labelCol = { xs: { span: 24 }, sm: { span: 8 } };
@@ -132,12 +152,4 @@ const wrapperCol = { xs: { span: 24 }, sm: { span: 16 } };
 
 </script>
 
-<style scoped>
-.user-form {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-}
-</style>
+<style scoped></style>
