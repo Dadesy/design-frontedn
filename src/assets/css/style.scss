@@ -2,6 +2,6 @@
   @apply flex flex-col h-full
 }
 
-:where(.css-dev-only-do-not-override-19iuou).ant-btn > .anticon {
+.ant-btn > .anticon {
   display: inline-flex !important;
 }
