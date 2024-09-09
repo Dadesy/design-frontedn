@@ -1,9 +1,9 @@
 <template>
   <a-card class="rounded-none border-l-0 border-r-0 border-t-0 card-header">
-    <div class="flex items-center gap-5">
-      <a href="/" class="logo w-40">
-        <the-logo class="block" />
-      </a>
+    <div class="flex items-center">
+      <div class="w-[226px]">
+        <slot name="logo"></slot>
+      </div>
       <pages-menu />
 
       <div class="profile">
@@ -14,7 +14,6 @@
 </template>
 
 <script lang="ts" setup>
-import TheLogo from '../TheLogo/TheLogo.vue';
 import PagesMenu from '../PagesMenu/PagesMenu.vue';
 
 </script>

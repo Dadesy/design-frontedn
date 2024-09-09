@@ -1,6 +1,6 @@
 <template>
     <page-title title="Ошибка отправки" />
-    <div class="p-5 error-page-example">
+    <div class="p-5">
         <a-card class="w-full">
             <a-result status="error" title="Ошибка отправки"
                 sub-title="Пожалуйста, проверьте и измените следующую информацию перед повторной отправкой.">

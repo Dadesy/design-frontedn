@@ -1,6 +1,6 @@
 <template>
     <page-title title="Успешно выполнена" />
-    <div class="p-5 error-page-example">
+    <div class="p-5">
         <a-card class="w-full">
             <a-result title="Отлично! Задача успешно выполнена!">
                 <template #icon>

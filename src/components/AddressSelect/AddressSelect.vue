@@ -36,7 +36,6 @@ async function onSearch(v: string) {
             addressLoad.value = true;
             const res = await axios.get(`${ADDRESS_API}addressdetails=1&q=${v}&format=jsonv2&limit=100`);
             if (res?.data && Array.isArray(res.data)) {
-                console.log(res.data);
                 addresses.value = res.data.map((v: any) => {
                     const result = `${v.address.village || ''} ${v.address.city || v.address.town || v.address.river ? 'р. ' + v.address.river : '' || ''} ${v.address.country || ''} ${v.address.state || ''}`
                     return {

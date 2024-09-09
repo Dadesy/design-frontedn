@@ -3,6 +3,11 @@
   <div class="p-5">
     <a-table :columns="columns" :data-source="loading ? skeletonDataSource : filteredDataSource" bordered
       @change="handleTableChange">
+      <template #title>
+        <a-flex justify="flex-end">
+          <a-button type="primary" :icon="h(DownloadOutlined)">Выгрузить в Excel</a-button>
+        </a-flex>
+      </template>
       <template #bodyCell="{ column, text, record }">
         <template v-if="loading">
           <a-skeleton :active="true" :loading="loading" :title="false" :paragraph="{ rows: 1 }"></a-skeleton>
@@ -95,8 +100,8 @@
 
 <script lang="ts" setup>
 import { cloneDeep } from 'lodash';
-import { reactive, ref, onMounted, type UnwrapRef } from 'vue';
-import { SearchOutlined } from '@ant-design/icons-vue';
+import { reactive, ref, onMounted, type UnwrapRef, h } from 'vue';
+import { SearchOutlined, DownloadOutlined } from '@ant-design/icons-vue';
 import { message } from 'ant-design-vue';
 import type { TableColumnType } from 'ant-design-vue';
 import type { Key } from 'ant-design-vue/es/table/interface';

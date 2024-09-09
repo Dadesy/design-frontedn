@@ -7,7 +7,7 @@
             </div>
 
             <a-form-item label="Тема:" class="w-[300px] mb-0">
-                <a-select placeholder="Тема" v-model="selected" :options="themes" :option-filter-prop="'label'"
+                <a-select placeholder="Тема" :value="selected" :options="themes" :option-filter-prop="'label'"
                     @select="onSelect">
                     <template #option="{ label, value }">
                         <div class="flex gap-1 items-center">
@@ -38,11 +38,15 @@ const props = defineProps<{
 }>();
 
 const title = props.title ?? '';
-const selected = ref(null);
+const currentTheme = localStorage.getItem('theme');
+const selected = ref(currentTheme ? currentTheme : null);
 
 function onSelect(v: string) {
     document.dispatchEvent(new CustomEvent('setTheme', {
         detail: THEME_LIST[v]
     }));
+
+    localStorage.setItem('theme', v);
+    selected.value = v;
 }
 </script>

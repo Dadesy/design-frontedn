@@ -14,6 +14,15 @@ export const THEME_LIST: ITheme = {
         mainColor: '#1890ff',
         token: undefined
     },
+    'Соц сеть ЭФКО': {
+        mainColor: '#0f766e',
+        token: {
+            "borderRadius": 16,
+            "colorPrimary": "#0f766e",
+            "colorInfo": "#0f766e",
+            "colorPrimaryBg": "#edf3f3"
+        }
+    },
     'ИСУИ': {
         mainColor: '#73a480',
         token: {

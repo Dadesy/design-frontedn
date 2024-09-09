@@ -1,20 +1,15 @@
 <template>
-    <a-menu
-        v-model:selectedKeys="selectedKeys2"
-        v-model:openKeys="openKeys"
-        mode="inline"
-        @click="handleMenuClick"
-        class="components-menu"
-    >
+    <a-menu v-model:selectedKeys="selectedKeys" v-model:openKeys="openKeys" mode="inline" @click="handleMenuClick"
+        class="components-menu">
         <a-menu-item key="/">
-            <form-outlined/>
+            <form-outlined />
             <span>Форма</span>
         </a-menu-item>
 
         <a-sub-menu key="/table">
             <template #title>
                 <span>
-                    <table-outlined/>
+                    <table-outlined />
                     <span>Таблица</span>
                 </span>
             </template>
@@ -30,14 +25,14 @@
         </a-sub-menu>
 
         <a-menu-item key="/calendar">
-            <CalendarOutlined/>
+            <CalendarOutlined />
             <span>Календарь</span>
         </a-menu-item>
 
         <a-sub-menu key="/error">
             <template #title>
                 <span>
-                    <warning-outlined/>
+                    <warning-outlined />
                     <span>Ошибки/успех</span>
                 </span>
             </template>
@@ -64,21 +59,29 @@
             </a-menu-item>
         </a-sub-menu>
         <a-menu-item key="/warningForm">
-          <appstore-outlined />
-          <span>Предупреждающие окна</span>
+            <appstore-outlined />
+            <span>Предупреждающие окна</span>
         </a-menu-item>
     </a-menu>
 </template>
 
 <script setup lang="ts">
-import {FormOutlined, WarningOutlined, AppstoreOutlined, TableOutlined, CalendarOutlined} from "@ant-design/icons-vue";
-import {ref} from 'vue';
-import {useRouter} from "vue-router";
-
-const selectedKeys2 = ref<string[]>(['/']);
-const openKeys = ref<string[]>(['']);
+import { FormOutlined, WarningOutlined, AppstoreOutlined, TableOutlined, CalendarOutlined } from "@ant-design/icons-vue";
+import { ref, watch } from 'vue';
+import { useRoute, useRouter } from "vue-router";
 
 const router = useRouter();
+const route = useRoute();
+
+const selectedKeys = ref<string[]>([route.path]);
+const openKeys = ref<string[]>([route.path?.split('/').slice(0, 2).join('/')]);
+
+watch(() => route.path, (newPath) => {
+    selectedKeys.value = [newPath];
+
+    const openKey = newPath.split('/').slice(0, 2).join('/');
+    openKeys.value = [openKey];
+});
 
 function handleMenuClick(event: { key: string }) {
     router.push(event.key);

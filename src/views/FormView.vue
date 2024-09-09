@@ -14,7 +14,7 @@
 
                 <label class="flex flex-col gap-2 mb-5">
                     <span>Введите пароль <i class="text-red-500">*</i></span>
-                    <a-input-password placeholder="input password" @blur="validateReqired('optionPass', $event)"
+                    <a-input-password size="large" placeholder="Ваш пароль" @blur="validateReqired('optionPass', $event)"
                         :status="requireError['optionPass'] ? 'error' : undefined"
                         @input="requireInputHandler('optionPass')" />
                     <div v-if="requireError['optionPass']" class="text-red-500">{{ requireError['optionPass'] }}</div>
@@ -179,6 +179,7 @@ import AddressSelect from "@/components/AddressSelect/AddressSelect.vue";
 import dayjs, { type Dayjs } from 'dayjs';
 import { message } from 'ant-design-vue';
 import type { UploadChangeParam, UploadProps } from 'ant-design-vue';
+import { EMAIL_PATTERN, PHONE_PATTERN } from "@/constants/regexp";
 
 let emailError = ref<string | null>('');
 let phoneError = ref<string | null>('');
@@ -195,9 +196,6 @@ const loading = ref<boolean>(false);
 const imageUrl = ref<string>('');
 const radioValue = ref<number>(1);
 
-const phonePattern = /^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/;
-const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
 const radioStyle = reactive({
     display: 'flex',
     height: '30px',
@@ -207,7 +205,7 @@ const radioStyle = reactive({
 function validateEmail(e: InputEvent) {
     const value = (e.target as HTMLInputElement).value;
     if (value.length > 0) {
-        emailError.value = emailPattern.test(value) ? null : 'Некорректный email';
+        emailError.value = EMAIL_PATTERN.test(value) ? null : 'Некорректный email';
         return;
     }
 
@@ -235,7 +233,7 @@ function requireInputHandler(field: string) {
 function validatePhone(e: InputEvent) {
     const value = (e.target as HTMLInputElement).value;
     if (value.length > 0) {
-        phoneError.value = phonePattern.test(value) ? null : 'Некорректный формат телефона';
+        phoneError.value = PHONE_PATTERN.test(value) ? null : 'Некорректный формат телефона';
         return;
     }
 

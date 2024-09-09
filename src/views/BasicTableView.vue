@@ -1,7 +1,12 @@
 <template>
   <page-title title="Базовая таблица" />
   <div class="p-5">
-    <a-table :columns="columns" :data-source="data" bordered>
+    <a-table :columns="columns" :data-source="data" bordered :pagination="false">
+      <template #title>
+        <a-flex justify="flex-end">
+          <a-button type="primary" :icon="h(DownloadOutlined)">Выгрузить в Excel</a-button>
+        </a-flex>
+      </template>
       <template #headerCell="{ column }">
         <template v-if="column.key === 'name'">
           <span>Имя</span>
@@ -26,8 +31,9 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { ref, h } from 'vue';
 import PageTitle from '@/components/PageTitle/PageTitle.vue';
+import { DownloadOutlined } from '@ant-design/icons-vue';
 
 interface DataItem {
   key: string;

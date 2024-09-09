@@ -1,6 +1,6 @@
 <template>
     <page-title title="Предупреждение" />
-    <div class="p-5 error-page-example">
+    <div class="p-5">
         <a-card class="w-full">
             <a-result status="warning" title="Возникли проблемы с вашей операцией"
                 sub-title="Дополнительная информация: Номер заказа: 2017182818828182881.">
@@ -11,6 +11,6 @@
         </a-card>
     </div>
 </template>
-<script setup>
+<script setup lang="ts">
 import PageTitle from '@/components/PageTitle/PageTitle.vue';
 </script>
