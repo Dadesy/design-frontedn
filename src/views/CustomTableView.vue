@@ -1,150 +1,136 @@
 <template>
-  <div>
-      <div class="switch">
-        <a-switch v-model:checked="loading" />
-         <p>Прогрузка таблицы</p>
+  <page-title title="Прогрузка таблицы" />
+  <div class="p-5">
+    <div class="switch">
+      <a-switch v-model:checked="loading" />
+      <p>Прогрузка таблицы</p>
+    </div>
+    <div class="switch">
+      <a-switch v-model:checked="card" />
+      <p>Отображение карточками</p>
+    </div>
+    <div v-show="isMobile || card" class="card-container">
+      <div v-for="record in loading ? skeletonDataSource : filteredDataSource" :key="record.key" class="card">
+        <div class="card-header">
+          <h3>{{ record.name }}</h3>
+          <p><strong>Возраст:</strong> {{ record.age }}</p>
+        </div>
+        <div class="card-body">
+          <p><strong>Адрес:</strong> {{ record.address }}</p>
+          <p><strong>Профессия:</strong> {{ record.profession }}</p>
+          <p><strong>Компания:</strong> {{ record.company }}</p>
+          <p><strong>Email:</strong> {{ record.email }}</p>
+          <div v-if="editableData[record.key]" class="card-switches">
+            <a-checkbox v-model:checked="editableData[record.key].checkbox" class="card-checkbox">
+              Включить
+            </a-checkbox>
+            <a-switch v-model:checked="editableData[record.key].switch" class="card-switch" />
+          </div>
+        </div>
+        <div class="card-footer editable-row-operations">
+          <a-button type="link" @click="openEditModal(record)">Редактировать</a-button>
+          <a-popconfirm title="Вы уверены, что хотите удалить эту запись?" @confirm="deleteRow(record.key)" okText="Да"
+            cancelText="Нет">
+            <a-button type="link">Удалить</a-button>
+          </a-popconfirm>
+        </div>
       </div>
+    </div>
+    <div v-show="!(isMobile || card)">
+      <a-table class="lazy-scroll" :columns="columns" :data-source="loading ? skeletonDataSource : filteredDataSource"
+        bordered @change="handleTableChange" :pagination="false"
+        :scroll="{ x: 'max-content', y: 'calc(100vh - 300px)' }" ref="table">
 
-    <a-table
-        class="lazy-scroll"
-        :columns="columns"
-        :data-source="loading ? skeletonDataSource : filteredDataSource"
-        bordered
-        @change="handleTableChange"
-        :pagination="false"
-        :scroll="{ x: 'max-content', y: 'calc(100vh - 300px)' }"
-        ref="table"
-    >
-      <template #bodyCell="{ column, text, record }">
-        <template v-if="loading">
-          <a-skeleton
-              :active="true"
-              :loading="loading"
-              :title="false"
-              :paragraph="{ rows: 1 }"
-          ></a-skeleton>
+        <template #title>
+          <a-flex justify="flex-end">
+            <a-tooltip title="Выгрузить в Excel">
+              <a-button :icon="h(DownloadOutlined)"></a-button>
+            </a-tooltip>
+          </a-flex>
         </template>
-        <template v-else>
-          <template v-if="['checkbox', 'switch'].includes(column.dataIndex)">
-            <div>
-              <template v-if="editableData[record.key]">
-                <a-checkbox
-                    v-if="column.dataIndex === 'checkbox'"
-                    v-model:checked="editableData[record.key][column.dataIndex as 'checkbox']"
-                    style="margin: -5px 0"
-                >
-                  Включить
-                </a-checkbox>
-                <a-switch
-                    v-else
-                    v-model:checked="editableData[record.key][column.dataIndex as 'switch']"
-                    style="margin: -5px 0"
-                />
-              </template>
-              <template v-else>
+
+        <template #bodyCell="{ column, text, record }">
+          <template v-if="loading">
+            <a-skeleton :active="true" :loading="loading" :title="false" :paragraph="{ rows: 1 }"></a-skeleton>
+          </template>
+          <template v-else>
+            <template v-if="['checkbox', 'switch'].includes(column.dataIndex)">
+              <div>
                 <template v-if="column.dataIndex === 'checkbox'">
                   {{ text ? 'Включено' : 'Выключено' }}
                 </template>
                 <template v-else-if="column.dataIndex === 'switch'">
                   {{ text ? 'Включено' : 'Выключено' }}
                 </template>
-              </template>
-            </div>
-          </template>
-          <template v-else-if="column.dataIndex === 'operation'">
-            <div class="editable-row-operations">
-              <a-button type="link" @click="openEditModal(record)">Редактировать</a-button>
-              <a-popconfirm
-                  title="Вы уверены, что хотите удалить эту запись?"
-                  @confirm="deleteRow(record.key)"
-                  okText="Да"
-                  cancelText="Нет"
-              >
-                <a-button type="link">Удалить</a-button>
-              </a-popconfirm>
-            </div>
-          </template>
-          <template v-else>
-            {{ text }}
+              </div>
+            </template>
+            <template v-else-if="column.dataIndex === 'operation'">
+              <div class="editable-row-operations">
+                <a-button type="link" @click="openEditModal(record)" class="pl-0">Редактировать</a-button>
+                <a-popconfirm title="Вы уверены, что хотите удалить эту запись?" @confirm="deleteRow(record.key)"
+                  okText="Да" cancelText="Нет">
+                  <a-button type="link" class="pl-0">Удалить</a-button>
+                </a-popconfirm>
+              </div>
+            </template>
+            <template v-else>
+              {{ text }}
+            </template>
           </template>
         </template>
-      </template>
-      <template #customFilterDropdown="{ setSelectedKeys, selectedKeys, confirm, clearFilters, column }">
-        <div style="padding: 8px">
-          <a-input
-              ref="searchInput"
-              :placeholder="`Поиск по ${column.dataIndex}`"
-              :value="selectedKeys[0]"
+        <template #customFilterDropdown="{ setSelectedKeys, selectedKeys, confirm, clearFilters, column }">
+          <div style="padding: 8px">
+            <a-input ref="searchInput" :placeholder="`Поиск по ${column.dataIndex}`" :value="selectedKeys[0]"
               style="width: 188px; margin-bottom: 8px; display: block"
               @change="(e: any) => setSelectedKeys(e.target.value ? [e.target.value] : [])"
-              @pressEnter="handleSearch(selectedKeys, confirm, column.dataIndex)"
-          />
-          <a-button
-              type="primary"
-              size="small"
-              style="width: 90px; margin-right: 8px"
-              @click="handleSearch(selectedKeys, confirm, column.dataIndex)"
-          >
-            <template #icon><SearchOutlined /></template>
-            Поиск
-          </a-button>
-          <a-button size="small" style="width: 90px" @click="handleReset(clearFilters)">
-            Сброс
-          </a-button>
-        </div>
-      </template>
-      <template #customFilterIcon="{ filtered }">
-        <search-outlined :style="{ color: filtered ? '#108ee9' : undefined }" />
-      </template>
-      <template #footer>
-        <div v-if="loadingMore" style="text-align: center; padding: 10px;">
-          <a-spin />
-        </div>
-      </template>
-    </a-table>
+              @pressEnter="handleSearch(selectedKeys, confirm, column.dataIndex)" />
+            <a-button type="primary" size="small" style="width: 90px; margin-right: 8px"
+              @click="handleSearch(selectedKeys, confirm, column.dataIndex)">
+              <template #icon>
+                <SearchOutlined />
+              </template>
+              Поиск
+            </a-button>
+            <a-button size="small" style="width: 90px" @click="handleReset(clearFilters)">
+              Сброс
+            </a-button>
+          </div>
+        </template>
+        <template #customFilterIcon="{ filtered }">
+          <search-outlined :style="{ color: filtered ? '#108ee9' : undefined }" />
+        </template>
+        <template #footer>
+          <div v-if="loadingMore" style="text-align: center; padding: 10px;">
+            <a-spin />
+          </div>
+        </template>
+      </a-table>
+    </div>
 
-    <a-modal
-        v-model:visible="isModalVisible"
-        title="Редактирование записи"
-        @ok="save(editingKey)"
-        @cancel="closeEditModal"
-    >
+    <a-modal v-model:visible="isModalVisible" title="Редактирование записи" @ok="save(editingKey)"
+      @cancel="closeEditModal(editingKey)">
       <a-form-item label="Имя" v-if="editingKey && editableData[editingKey]">
-        <a-input
-            v-model:value="editableData[editingKey].name"
-            :disabled="!isEditing"
-        />
+        <a-input v-model:value="editableData[editingKey].name" :disabled="!isEditing" />
       </a-form-item>
       <a-form-item label="Возраст" v-if="editingKey && editableData[editingKey]">
-        <a-input-number
-            v-model:value="editableData[editingKey].age"
-            :disabled="!isEditing"
-            :min="0"
-        />
+        <a-input-number v-model:value="editableData[editingKey].age" :disabled="!isEditing" :min="0" />
       </a-form-item>
       <a-form-item label="Адрес" v-if="editingKey && editableData[editingKey]">
-        <a-select
-            v-model:value="editableData[editingKey].address"
-            :disabled="!isEditing"
-        >
+        <a-select v-model:value="editableData[editingKey].address" :disabled="!isEditing">
           <a-select-option value="Центральный парк">Центральный парк</a-select-option>
-          <a-select-option value="Парк на Краснопресненской набережной">Парк на Краснопресненской набережной</a-select-option>
+          <a-select-option value="Парк на Краснопресненской набережной">Парк на Краснопресненской
+            набережной</a-select-option>
           <a-select-option value="Парк Горького">Парк Горького</a-select-option>
         </a-select>
       </a-form-item>
-      <a-form-item v-if="editingKey && editableData[editingKey]">
-        <a-checkbox
-            v-model:checked="editableData[editingKey].checkbox"
-            :disabled="!isEditing"
-        >
-          Включить
-        </a-checkbox>
+      <a-form-item label="Профессия" v-if="editingKey && editableData[editingKey]">
+        <a-input v-model:value="editableData[editingKey].profession" :disabled="!isEditing" />
       </a-form-item>
-      <a-form-item v-if="editingKey && editableData[editingKey]">
-        <a-switch
-            v-model:checked="editableData[editingKey].switch"
-            :disabled="!isEditing"
-        />
+      <a-form-item label="Компания" v-if="editingKey && editableData[editingKey]">
+        <a-input v-model:value="editableData[editingKey].company" :disabled="!isEditing" />
+      </a-form-item>
+      <a-form-item label="Email" v-if="editingKey && editableData[editingKey]">
+        <a-input v-model:value="editableData[editingKey].email" :disabled="!isEditing" />
       </a-form-item>
     </a-modal>
   </div>
@@ -152,16 +138,20 @@
 
 <script lang="ts" setup>
 import { cloneDeep } from 'lodash';
-import { reactive, ref, onMounted } from 'vue';
-import { SearchOutlined } from '@ant-design/icons-vue';
+import { reactive, ref, onMounted, onBeforeUnmount, h } from 'vue';
+import { SearchOutlined, DownloadOutlined } from '@ant-design/icons-vue';
 import { message } from 'ant-design-vue';
 import type { UnwrapRef } from 'vue';
+import PageTitle from '@/components/PageTitle/PageTitle.vue';
 
 interface DataItem {
   key: string;
   name: string;
   age: number;
   address: string;
+  profession: string;
+  company: string;
+  email: string;
   checkbox: boolean;
   switch: boolean;
 }
@@ -174,13 +164,30 @@ const currentPage = ref<number>(1);
 const pageSize = 20;
 const hasMoreData = ref<boolean>(true);
 const loadingMore = ref<boolean>(false);
+const card = ref<boolean>(false);
+
+const isMobile = ref<boolean>(window.innerWidth <= 768);
+
+const handleResize = () => {
+  isMobile.value = window.innerWidth <= 768;
+};
+
+onMounted(() => {
+  window.addEventListener('resize', handleResize);
+  loadData();
+  const table = document.querySelector('.ant-table-body');
+  table?.addEventListener('scroll', handleScroll);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', handleResize);
+});
 
 const columns = [
   {
     title: 'Имя',
     dataIndex: 'name',
     key: 'name',
-    width: '20%',
     sorter: (a: DataItem, b: DataItem) => a.name.localeCompare(b.name),
     filters: [
       { text: 'Иван', value: 'Иван' },
@@ -206,7 +213,6 @@ const columns = [
     title: 'Адрес',
     dataIndex: 'address',
     key: 'address',
-    width: '30%',
     sorter: (a: DataItem, b: DataItem) => a.address.localeCompare(b.address),
     filters: [
       { text: 'Центральный парк', value: 'Центральный парк' },
@@ -216,16 +222,32 @@ const columns = [
     onFilter: (value: string, record: DataItem) => record.address.includes(value),
   },
   {
+    title: 'Профессия',
+    dataIndex: 'profession',
+    key: 'profession',
+    sorter: (a: DataItem, b: DataItem) => a.profession.localeCompare(b.profession),
+  },
+  {
+    title: 'Компания',
+    dataIndex: 'company',
+    key: 'company',
+    sorter: (a: DataItem, b: DataItem) => a.company.localeCompare(b.company),
+  },
+  {
+    title: 'Email',
+    dataIndex: 'email',
+    key: 'email',
+  },
+  {
     title: 'Чекбокс',
     dataIndex: 'checkbox',
     key: 'checkbox',
-    width: '15%',
   },
   {
     title: 'Переключатель',
     dataIndex: 'switch',
     key: 'switch',
-    width: '15%',
+    width: '12%',
   },
   {
     title: 'Операции',
@@ -241,6 +263,9 @@ for (let i = 0; i < 100; i++) {
     name: `Иван ${i}`,
     age: 32 + (i % 3) * 10,
     address: `Центральный парк ${i}`,
+    profession: `Профессия ${i}`,
+    company: `Компания ${i}`,
+    email: `ivan${i}@example.com`,
     checkbox: i % 2 === 0,
     switch: i % 2 === 0,
   });
@@ -253,6 +278,9 @@ for (let i = 0; i < 10; i++) {
     name: '',
     age: 0,
     address: '',
+    profession: '',
+    company: '',
+    email: '',
     checkbox: false,
     switch: false,
   });
@@ -271,16 +299,20 @@ const state = reactive({
 });
 
 const openEditModal = (record: DataItem) => {
-  editingKey.value = record.key;
   editableData[record.key] = cloneDeep(record);
+  editingKey.value = record.key;
   isEditing.value = true;
   isModalVisible.value = true;
 };
 
-const closeEditModal = () => {
-  isModalVisible.value = false;
+const closeEditModal = (key: string | null) => {
+  if (key) {
+    delete editableData[key];
+  }
+
   editingKey.value = null;
   isEditing.value = false;
+  isModalVisible.value = false;
 };
 
 const save = (key: string | null) => {
@@ -288,10 +320,12 @@ const save = (key: string | null) => {
     const recordIndex = dataSource.value.findIndex(item => item.key === key);
     if (recordIndex !== -1) {
       dataSource.value[recordIndex] = cloneDeep(editableData[key]);
+      filteredDataSource.value[recordIndex] = cloneDeep(editableData[key]);
       message.success('Изменения сохранены');
     }
   }
-  closeEditModal();
+
+  closeEditModal(key);
 };
 
 const deleteRow = (key: string) => {
@@ -301,9 +335,9 @@ const deleteRow = (key: string) => {
 };
 
 const handleTableChange = (
-    pagination: any,
-    filters: Record<string, (string | number | boolean)[] | null>,
-    sorter: any
+  pagination: any,
+  filters: Record<string, (string | number | boolean)[] | null>,
+  sorter: any
 ) => {
   let filteredData = [...dataSource.value];
 
@@ -326,6 +360,10 @@ const handleTableChange = (
         return order * (a.age - b.age);
       } else if (sorter.field === 'address') {
         return order * a.address.localeCompare(b.address);
+      } else if (sorter.field === 'profession') {
+        return order * a.profession.localeCompare(b.profession);
+      } else if (sorter.field === 'company') {
+        return order * a.company.localeCompare(b.company);
       }
       return 0;
     });
@@ -335,9 +373,9 @@ const handleTableChange = (
 };
 
 const handleSearch = (
-    selectedKeys: string[],
-    confirm: () => void,
-    dataIndex: string
+  selectedKeys: string[],
+  confirm: () => void,
+  dataIndex: string
 ) => {
   confirm();
   state.searchText = selectedKeys[0];
@@ -362,6 +400,9 @@ const loadData = async () => {
         name: `Иван ${index}`,
         age: 25 + (index % 3) * 10,
         address: `Центральный парк ${index}`,
+        profession: `Профессия ${index}`,
+        company: `Компания ${index}`,
+        email: `ivan${index}@example.com`,
         checkbox: index % 2 === 0,
         switch: index % 2 === 0,
       });
@@ -388,28 +429,108 @@ const handleScroll = () => {
     }
   }
 };
-
-onMounted(() => {
-  loadData();
-  const table = document.querySelector('.ant-table-body');
-  table?.addEventListener('scroll', handleScroll);
-});
 </script>
 
 <style scoped>
-.editable-row-operations {
-  display: flex;
-  align-items: center;
-}
-
-.editable-row-operations a-button {
-  margin-right: 8px;
-}
-
 .switch {
   padding: 10px 20px;
   display: flex;
   gap: 10px;
 }
 
+/* Контейнер для карточек */
+.card-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 16px;
+}
+
+/* Стили для карточек */
+.card {
+  border: 1px solid #dfe1e5;
+  border-radius: 12px;
+  padding: 24px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  border-bottom: 2px solid #f1f3f4;
+  padding-bottom: 16px;
+}
+
+.card-header h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #202124;
+}
+
+.card-header p {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #5f6368;
+}
+
+.card-body {
+  margin-bottom: 16px;
+  line-height: 1.6;
+}
+
+.card-body p {
+  margin: 0 0 8px;
+  font-size: 1rem;
+  color: #3c4043;
+}
+
+.card-switches {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-top: 16px;
+}
+
+.card-checkbox {
+  font-size: 1rem;
+  color: #202124;
+}
+
+.card-switch {
+  font-size: 1rem;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: flex-end;
+  border-top: 2px solid #f1f3f4;
+  padding-top: 16px;
+}
+
+@media (max-width: 768px) {
+  .card-container {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
+
+  .card {
+    padding: 16px;
+    margin: 8px 0;
+  }
+
+  .card-header h3 {
+    font-size: 1.25rem;
+  }
+
+  .card-body p {
+    font-size: 0.9rem;
+  }
+}
 </style>

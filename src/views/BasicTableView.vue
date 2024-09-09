@@ -1,32 +1,39 @@
 <template>
-  <a-table :columns="columns" :data-source="data">
-    <template #headerCell="{ column }">
-      <template v-if="column.key === 'name'">
-        <span>Имя</span>
+  <page-title title="Базовая таблица" />
+  <div class="p-5">
+    <a-table :columns="columns" :data-source="data" bordered :pagination="false">
+      <template #title>
+        <a-flex justify="flex-end">
+          <a-button type="primary" :icon="h(DownloadOutlined)">Выгрузить в Excel</a-button>
+        </a-flex>
       </template>
-    </template>
+      <template #headerCell="{ column }">
+        <template v-if="column.key === 'name'">
+          <span>Имя</span>
+        </template>
+      </template>
 
-    <template #bodyCell="{ column, record }">
-      <template v-if="column.key === 'name'">
-        <span>{{ record.name }}</span>
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'name'">
+          <span>{{ record.name }}</span>
+        </template>
+        <template v-else-if="column.key === 'roles'">
+          <span>
+            <a-tag v-for="role in record.roles" :key="role"
+              :color="role === 'новичок' ? 'volcano' : role.length > 5 ? 'geekblue' : 'green'">
+              {{ role.toUpperCase() }}
+            </a-tag>
+          </span>
+        </template>
       </template>
-      <template v-else-if="column.key === 'roles'">
-        <span>
-          <a-tag
-              v-for="role in record.roles"
-              :key="role"
-              :color="role === 'новичок' ? 'volcano' : role.length > 5 ? 'geekblue' : 'green'"
-          >
-            {{ role.toUpperCase() }}
-          </a-tag>
-        </span>
-      </template>
-    </template>
-  </a-table>
+    </a-table>
+  </div>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { ref, h } from 'vue';
+import PageTitle from '@/components/PageTitle/PageTitle.vue';
+import { DownloadOutlined } from '@ant-design/icons-vue';
 
 interface DataItem {
   key: string;
