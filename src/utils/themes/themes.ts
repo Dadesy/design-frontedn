@@ -68,6 +68,8 @@ export const THEME_LIST: ITheme = {
             "borderRadius": 6,
             "sizeStep": 4,
             "sizeUnit": 4,
+            "controlItemBgActive": "#2d2f33",
+            "colorPrimaryBg": "#2d2f33",
         }
     },
     "Темная контрастная": {
@@ -81,6 +83,8 @@ export const THEME_LIST: ITheme = {
             "borderRadius": 6,
             "sizeStep": 4,
             "sizeUnit": 4,
+            "controlItemBgActive": "#151515",
+            "colorPrimaryBg": "#151515",
         }
     }
 }
