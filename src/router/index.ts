@@ -17,6 +17,7 @@ import TemplatesLayout from "@/layouts/TemplatesLayout.vue";
 import TemplateEditScenario from "@/views/TemplateEditScenario.vue";
 import TemplateJournal from "@/views/TemplateJournal.vue";
 import TemplateUsers from "@/views/TemplateUsers.vue";
+import HomePageLayout from "@/layouts/HomePageLayout.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -24,13 +25,21 @@ const router = createRouter({
     {
       path: "/",
       name: "home",
+      component: HomePageLayout,
+      meta: {
+        breadcrumbName: "Главная",
+      },
+    },
+    {
+      path: "/components",
+      name: "components",
       component: ComponentsLayout,
       meta: {
         breadcrumbName: "Компоненты",
       },
       children: [
         {
-          path: "/",
+          path: "/components/form",
           name: "form",
           component: FormView,
           meta: {
@@ -38,14 +47,14 @@ const router = createRouter({
           },
         },
         {
-          path: "/table",
+          path: "/components/table",
           name: "table",
           meta: {
             breadcrumbName: "Таблица",
           },
           children: [
             {
-              path: "advanced",
+              path: "/components/table/advanced",
               name: "advancedTable",
               component: AdvancedTableView,
               meta: {
@@ -53,7 +62,7 @@ const router = createRouter({
               },
             },
             {
-              path: "basic",
+              path: "/components/table/basic",
               name: "basicTable",
               component: BasicTableView,
               meta: {
@@ -61,7 +70,7 @@ const router = createRouter({
               },
             },
             {
-              path: "custom",
+              path: "/components/table/custom",
               name: "customTable",
               component: CustomTableView,
               meta: {
@@ -71,14 +80,14 @@ const router = createRouter({
           ],
         },
         {
-          path: "/error",
+          path: "/components/error",
           name: "error",
           meta: {
             breadcrumbName: "Страницы ошибок/успеха",
           },
           children: [
             {
-              path: "success",
+              path: "/components/error/success",
               name: "successPage",
               component: SuccessPagView,
               meta: {
@@ -86,7 +95,7 @@ const router = createRouter({
               },
             },
             {
-              path: "warning",
+              path: "/components/error/warning",
               name: "warningPage",
               component: WarningPageView,
               meta: {
@@ -94,7 +103,7 @@ const router = createRouter({
               },
             },
             {
-              path: "403",
+              path: "/components/error/403",
               name: "403Page",
               component: Page403View,
               meta: {
@@ -102,7 +111,7 @@ const router = createRouter({
               },
             },
             {
-              path: "404",
+              path: "/components/error/404",
               name: "404Page",
               component: Page404View,
               meta: {
@@ -110,7 +119,7 @@ const router = createRouter({
               },
             },
             {
-              path: "500",
+              path: "/components/error/500",
               name: "500Page",
               component: Page500View,
               meta: {
@@ -118,7 +127,7 @@ const router = createRouter({
               },
             },
             {
-              path: "submission",
+              path: "/components/error/submission",
               name: "submissionPage",
               component: SubmissionFailedPageView,
               meta: {
@@ -126,7 +135,7 @@ const router = createRouter({
               },
             },
             {
-              path: "great",
+              path: "/components/error/great",
               name: "greatPage",
               component: GreatPageView,
               meta: {
@@ -136,7 +145,7 @@ const router = createRouter({
           ],
         },
         {
-          path: "/calendar",
+          path: "/components/calendar",
           name: "calendar",
           component: CalendarView,
           meta: {
@@ -144,7 +153,7 @@ const router = createRouter({
           },
         },
         {
-          path: "/warningForm",
+          path: "/components/warningForm",
           name: "warningForm",
           component: WarningFormView,
           meta: {

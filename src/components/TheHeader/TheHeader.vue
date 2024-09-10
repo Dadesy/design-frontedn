@@ -1,15 +1,17 @@
 <template>
   <div class="rounded-none pl-6 pr-6 border-b border-solid"
     :style="{ borderColor: colors.colorBorderSecondary, backgroundColor: colors.colorPrimaryBg }">
-    <div class="flex items-center">
+    <div class="flex items-center justify-between">
       <div class="w-[226px]">
         <slot name="logo"></slot>
       </div>
-      <pages-menu />
 
-      <div class="profile">
-        <img src="../../assets//img/user.png" class="block" />
-      </div>
+      <a-flex align="center" gap="large">
+        <pages-menu />
+        <div class="profile" :style="{ backgroundColor: colors.colorPrimary, color: colors.colorTextLightSolid }">
+          АП
+        </div>
+      </a-flex>
     </div>
   </div>
 </template>
@@ -25,6 +27,6 @@ console.log(colors.value);
 </script>
 <style>
 .profile {
-  @apply ml-auto rounded-full w-10 h-10 min-w-10 cursor-pointer;
+  @apply ml-auto rounded-full w-7 h-7 min-w-7 cursor-pointer flex items-center justify-center text-xs;
 }
 </style>

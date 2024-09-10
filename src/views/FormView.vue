@@ -6,15 +6,14 @@
 
                 <label class="flex flex-col gap-2 mb-5">
                     <span>Вариант интпута <i class="text-red-500">*</i></span>
-                    <a-input size="large" placeholder="Введите текст"
-                        :status="requireError['optionText'] ? 'error' : undefined"
+                    <a-input placeholder="Введите текст" :status="requireError['optionText'] ? 'error' : undefined"
                         @blur="validateReqired('optionText', $event)" @input="requireInputHandler('optionText')" />
                     <div v-if="requireError['optionText']" class="text-red-500">{{ requireError['optionText'] }}</div>
                 </label>
 
                 <label class="flex flex-col gap-2 mb-5">
                     <span>Введите пароль <i class="text-red-500">*</i></span>
-                    <a-input-password size="large" placeholder="Ваш пароль" @blur="validateReqired('optionPass', $event)"
+                    <a-input-password placeholder="Ваш пароль" @blur="validateReqired('optionPass', $event)"
                         :status="requireError['optionPass'] ? 'error' : undefined"
                         @input="requireInputHandler('optionPass')" />
                     <div v-if="requireError['optionPass']" class="text-red-500">{{ requireError['optionPass'] }}</div>
@@ -24,7 +23,7 @@
                 <label class="flex flex-col gap-2 mb-5">
                     <span>Вариант интпута email</span>
                     <div>
-                        <a-input type="email" size="large" @blur="validateEmail" placeholder="Введите email"
+                        <a-input type="email" @blur="validateEmail" placeholder="Введите email"
                             :status="emailError ? 'error' : undefined" @input="emailInputHandler" />
                         <div v-if="emailError" class="text-red-500">{{ emailError }}</div>
                     </div>
@@ -33,7 +32,7 @@
                 <label class="flex flex-col gap-2 mb-5">
                     <span>Вариант интпута телефон</span>
                     <div>
-                        <a-input type="text" @blur="validatePhone" size="large" v-mask="'+7 (###) ###-##-##'"
+                        <a-input type="text" @blur="validatePhone" v-mask="'+7 (###) ###-##-##'"
                             placeholder="+7 (___) ___-__-__" :status="phoneError ? 'error' : undefined" />
                         <div v-if="phoneError" class="text-red-500">{{ phoneError }}</div>
                     </div>
@@ -41,7 +40,7 @@
 
                 <label class="flex flex-col gap-2 mb-5">
                     <span>Маска времени</span>
-                    <a-time-picker v-model="valueTime" format="HH:mm" v-mask="'##:##'" size="large" class="w-full"
+                    <a-time-picker v-model="valueTime" format="HH:mm" v-mask="'##:##'" class="w-full"
                         placeholder="__:__" />
                 </label>
 
@@ -49,7 +48,7 @@
                     <span>Маска даты рождения</span>
                     <div>
                         <a-date-picker v-model="valueBirthday" v-mask="'##.##.####'" :format="`DD.MM.YYYY`"
-                            class="w-full" placeholder="__.__.____" size="large" />
+                            class="w-full" placeholder="__.__.____" />
                     </div>
                 </label>
 
@@ -58,7 +57,7 @@
 
                 <label class="flex flex-col gap-2 mb-5">
                     <span>Вариант выпадающего списка</span>
-                    <a-select ref="select" size="large" class="w-full" placeholder="Выберите вариант">
+                    <a-select ref="select" class="w-full" placeholder="Выберите вариант">
                         <a-select-option value="Общая">Общая</a-select-option>
                         <a-select-option value="ИСУИ">ИСУИ</a-select-option>
                         <a-select-option value="MDM">MDM</a-select-option>
@@ -67,7 +66,7 @@
 
                 <label class="flex flex-col gap-2 mb-5">
                     <span>Вариант выпадающего списка c множественным выбором</span>
-                    <a-select class="w-full" :options="optionsMultiple" mode="multiple" size="large"
+                    <a-select class="w-full" :options="optionsMultiple" mode="multiple"
                         placeholder="Выберите варианты" />
                 </label>
 
@@ -86,7 +85,7 @@
                         Вариант лэйбл с изображением
                         <eye-outlined class="w-4 h-4 cursor-pointer relative top-[1px]" />
                     </span>
-                    <a-select ref="select" size="large" class="w-full" placeholder="Выберите шаблон">
+                    <a-select ref="select" class="w-full" placeholder="Выберите шаблон">
                         <a-select-option value="Повторная отправка файлов МЧД">Повторная отправка файлов МЧД
                         </a-select-option>
                         <a-select-option value="Универсальный шаблон">Универсальный шаблон</a-select-option>
@@ -116,8 +115,8 @@
 
                 <label class="flex flex-col gap-2 mb-5">
                     <span>Диапазон дат</span>
-                    <a-range-picker name="buildTime" class="w-[300px]" :placeholder="['Дата начала', 'Дата окончания']"
-                        size="large" />
+                    <a-range-picker name="buildTime" class="w-[300px]"
+                        :placeholder="['Дата начала', 'Дата окончания']" />
                 </label>
 
                 <label class="flex flex-col gap-2 mb-5">
@@ -151,7 +150,7 @@
                     </div>
 
                     <a-flex>
-                        <a-button type="primary" size="large" href="./files/npl.jpg" download>
+                        <a-button type="primary" href="./files/npl.jpg" download>
                             <template #icon>
                                 <DownloadOutlined />
                             </template>
@@ -164,8 +163,8 @@
 
         <a-card class="w-full mt-5">
             <a-flex gap="small">
-                <a-button size="large" type="primary">Сохранить</a-button>
-                <a-button size="large">Отмена</a-button>
+                <a-button type="primary">Сохранить</a-button>
+                <a-button>Отмена</a-button>
             </a-flex>
         </a-card>
     </a-form>
