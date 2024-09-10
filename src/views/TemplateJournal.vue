@@ -41,10 +41,10 @@
                     </a-flex>
                 </a-flex>
 
-                <a-table :columns="columns" :data-source="data" bordered :pagination="false">
+                <a-table :columns="columns" :data-source="data" bordered :pagination="false" size="small">
                     <template #bodyCell="{ column, record }">
                         <template v-if="column.key === 'status'">
-                            <a-tag :color="getStatusColor(record[column.key])">
+                            <a-tag :color="getStatusColor(record[column.key])" :bordered="false" class="bg-transparent">
                                 {{ record[column.key].toUpperCase() }}
                             </a-tag>
                         </template>

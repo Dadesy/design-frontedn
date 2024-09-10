@@ -39,7 +39,7 @@
     <div v-show="!(isMobile || card)">
       <a-table class="lazy-scroll" :columns="columns" :data-source="loading ? skeletonDataSource : filteredDataSource"
         bordered @change="handleTableChange" :pagination="false"
-        :scroll="{ x: 'max-content', y: 'calc(100vh - 300px)' }" ref="table">
+        :scroll="{ x: 'max-content', y: 'calc(100vh - 300px)' }" ref="table" size="small">
 
         <template #title>
           <a-flex justify="flex-end">

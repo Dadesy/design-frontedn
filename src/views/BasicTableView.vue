@@ -1,10 +1,10 @@
 <template>
   <page-title title="Базовая таблица" />
   <div class="p-5">
-    <a-table :columns="columns" :data-source="data" bordered :pagination="false">
+    <a-table :columns="columns" :data-source="data" bordered :pagination="false" size="small">
       <template #title>
         <a-flex justify="flex-end">
-          <a-button type="primary" :icon="h(DownloadOutlined)">Выгрузить в Excel</a-button>
+          <a-button type="primary" :icon="h(DownloadOutlined)"/>
         </a-flex>
       </template>
       <template #headerCell="{ column }">
