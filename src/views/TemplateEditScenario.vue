@@ -10,7 +10,7 @@
 
                 <label class="flex flex-col gap-2 mb-5">
                     <span>Название сценария <i class="text-red-500">*</i></span>
-                    <a-input size="large" placeholder="Введите текст"
+                    <a-input placeholder="Введите текст"
                         :status="requireError['optionText'] ? 'error' : undefined"
                         @blur="validateReqired('optionText', $event)" @input="requireInputHandler('optionText')" />
                     <div v-if="requireError['optionText']" class="text-red-500">{{ requireError['optionText'] }}</div>
@@ -18,7 +18,7 @@
 
                 <label class="flex flex-col gap-2 mb-5">
                     <span>Группа доступа</span>
-                    <a-select ref="select" size="large" class="w-full" placeholder="Выберите группу доступа">
+                    <a-select ref="select" class="w-full" placeholder="Выберите группу доступа">
                         <a-select-option value="Общая">Общая</a-select-option>
                         <a-select-option value="ИСУИ">ИСУИ</a-select-option>
                         <a-select-option value="MDM">MDM</a-select-option>
@@ -27,7 +27,7 @@
 
                 <label class="flex flex-col gap-2 mb-5">
                     <span>Провайдер</span>
-                    <a-select ref="select" size="large" class="w-full" placeholder="Выберите провайдер">
+                    <a-select ref="select" class="w-full" placeholder="Выберите провайдер">
                         <a-select-option value="Email">Email</a-select-option>
                         <a-select-option value="СМС центр">СМС центр</a-select-option>
                         <a-select-option value="Zvonok.com">Zvonok.com</a-select-option>
@@ -37,7 +37,7 @@
 
                 <label class="flex flex-col gap-2 mb-5">
                     <span>Приоритет обработки</span>
-                    <a-select ref="select" size="large" class="w-full" placeholder="Выберите приоритет">
+                    <a-select ref="select" class="w-full" placeholder="Выберите приоритет">
                         <a-select-option value="Email">Не установлен</a-select-option>
                         <a-select-option value="СМС центр">Высокий</a-select-option>
                         <a-select-option value="Zvonok.com">Средний</a-select-option>
@@ -55,7 +55,7 @@
 
                 <label class="flex flex-col gap-2 mb-5">
                     <span>Адресанты</span>
-                    <a-select v-model:value="valueAdresses" class="w-full" mode="tags" size="large" placeholder="Email"
+                    <a-select v-model:value="valueAdresses" class="w-full" mode="tags" placeholder="Email"
                         :not-found-content="null" :filter-option="false" />
                 </label>
 
@@ -64,7 +64,7 @@
                         Шаблоны
                         <eye-outlined class="w-4 h-4 cursor-pointer relative top-[1px]" />
                     </span>
-                    <a-select ref="select" size="large" class="w-full" placeholder="Выберите шаблон">
+                    <a-select ref="select" class="w-full" placeholder="Выберите шаблон">
                         <a-select-option value="Повторная отправка файлов МЧД">Повторная отправка файлов
                             МЧД</a-select-option>
                         <a-select-option value="Универсальный шаблон">Универсальный шаблон</a-select-option>
@@ -89,8 +89,8 @@
 
         <a-card class="w-full mt-5">
             <a-flex gap="small">
-                <a-button size="large" type="primary">Сохранить</a-button>
-                <a-button size="large">Отмена</a-button>
+                <a-button type="primary">Сохранить</a-button>
+                <a-button>Отмена</a-button>
             </a-flex>
         </a-card>
     </a-form>

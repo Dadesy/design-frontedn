@@ -1,6 +1,5 @@
 <template>
     <a-select
-        size="large"
         class="w-full"
         placeholder="Выберите вариант"
         v-model="value"

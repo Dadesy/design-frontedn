@@ -32,7 +32,7 @@
                     </a-flex>
                 </a-flex>
 
-                <a-table :columns="columns" :data-source="data" bordered :pagination="false">
+                <a-table :columns="columns" :data-source="data" bordered :pagination="false" size="small">
                     <template #bodyCell="{ column, record }">
                         <template v-if="column.key === 'user'">
                             <a-flex gap="small" align="center">

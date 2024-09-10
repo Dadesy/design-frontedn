@@ -1,3 +1,4 @@
+import './assets/css/font.scss';
 import './assets/css/tailwind.css';
 import './assets/css/style.scss';
 import 'ant-design-vue/dist/reset.css';

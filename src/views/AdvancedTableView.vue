@@ -2,10 +2,10 @@
   <page-title title="Расширенная таблица" />
   <div class="p-5">
     <a-table :columns="columns" :data-source="loading ? skeletonDataSource : filteredDataSource" bordered
-      @change="handleTableChange">
+      @change="handleTableChange" size="small">
       <template #title>
         <a-flex justify="flex-end">
-          <a-button type="primary" :icon="h(DownloadOutlined)">Выгрузить в Excel</a-button>
+          <a-button type="primary" :icon="h(DownloadOutlined)"/>
         </a-flex>
       </template>
       <template #bodyCell="{ column, text, record }">

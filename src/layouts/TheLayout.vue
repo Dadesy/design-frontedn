@@ -14,7 +14,9 @@
                             </template>
                         </the-sider>
                         <a-layout-content class="flex flex-col">
-                            <RouterView />
+                            <slot name="router-view">
+                                <RouterView />
+                            </slot>
                             <the-footer class="mt-auto" />
                         </a-layout-content>
                     </a-layout>
