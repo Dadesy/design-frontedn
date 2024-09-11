@@ -91,7 +91,6 @@ const onSubmit = () => {
     return;
   }
 
-  console.log('submit!', toRaw(formState));
   saved = true;
 
   Modal.success({

@@ -17,7 +17,7 @@ export const THEME_LIST: ITheme = {
     'Соц сеть ЭФКО': {
         mainColor: '#0f766e',
         token: {
-            "borderRadius": 16,
+            "borderRadius": 6,
             "colorPrimary": "#0f766e",
             "colorInfo": "#0f766e",
             "colorPrimaryBg": "#edf3f3"
@@ -30,7 +30,7 @@ export const THEME_LIST: ITheme = {
             "colorInfo": "#73a480",
             "colorTextBase": "#222222",
             "wireframe": true,
-            "borderRadius": 0
+            "borderRadius": 6
         },
     },
     'QMoex': {

@@ -5,7 +5,9 @@
       @change="handleTableChange" size="small">
       <template #title>
         <a-flex justify="flex-end">
-          <a-button type="primary" :icon="h(DownloadOutlined)"/>
+          <a-tooltip title="Выгрузить в Excel" placement="left">
+            <a-button :icon="h(DownloadOutlined)"></a-button>
+          </a-tooltip>
         </a-flex>
       </template>
       <template #bodyCell="{ column, text, record }">

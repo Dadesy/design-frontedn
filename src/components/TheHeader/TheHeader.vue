@@ -22,8 +22,6 @@ import { useThemeColors } from '@/hooks/useThemeColors';
 
 const { colors } = useThemeColors();
 
-console.log(colors.value);
-
 </script>
 <style>
 .profile {

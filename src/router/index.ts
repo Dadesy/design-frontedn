@@ -18,6 +18,7 @@ import TemplateEditScenario from "@/views/TemplateEditScenario.vue";
 import TemplateJournal from "@/views/TemplateJournal.vue";
 import TemplateUsers from "@/views/TemplateUsers.vue";
 import HomePageLayout from "@/layouts/HomePageLayout.vue";
+import SystemMaintenance from "@/views/SystemMaintenance.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -140,6 +141,14 @@ const router = createRouter({
               component: GreatPageView,
               meta: {
                 breadcrumbName: "Задача выполнена",
+              },
+            },
+            {
+              path: "/components/error/work",
+              name: "workPage",
+              component: SystemMaintenance,
+              meta: {
+                breadcrumbName: "Технические работы",
               },
             },
           ],
