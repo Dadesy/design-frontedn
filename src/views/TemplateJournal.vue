@@ -35,7 +35,7 @@
 
                     <a-flex gap="small" align="center">
                         <a-tooltip title="Выгрузить в Excel">
-                            <a-button type="primary" :icon="h(DownloadOutlined)"></a-button>
+                            <a-button :icon="h(DownloadOutlined)"></a-button>
                         </a-tooltip>
                         <span :style="{ color: colors.colorTextDescription }">Найдено 301 записей</span>
                     </a-flex>
@@ -50,8 +50,8 @@
                         </template>
                         <template v-else-if="column.key === 'provider'">
                             <a-flex gap="small" align="center">
-                                <img class="block w-8 min-w-8 h-8" :src="getProviderImage(record[column.key])"
-                                    :alt="record[column.key]" />
+                                <component :is="getProviderImage(record[column.key])"
+                                    class="block w-4 min-w-4 h-4 svg-w-full"></component>
                                 <span>{{ record[column.key] }}</span>
                             </a-flex>
                         </template>
@@ -69,32 +69,28 @@
 import { ref, h } from 'vue';
 import PageTitle from '@/components/PageTitle/PageTitle.vue';
 import { useThemeColors } from '@/hooks/useThemeColors';
-import email from "../assets/img/providers/email.svg";
-import smsc from "../assets/img/providers/smsc_ru.svg";
-import bot from "../assets/img/providers/telegram_bot.svg";
-import zvonok from "../assets/img/providers/zvonok_com.svg";
-import { DownloadOutlined } from '@ant-design/icons-vue';
+import { DownloadOutlined, SendOutlined, PhoneOutlined, MessageOutlined, MailOutlined } from '@ant-design/icons-vue';
 
 const { colors } = useThemeColors();
 
 const switched = ref<boolean>(false);
 
-const colorMap: { [key: string]: string } = {
+const colorMap: { [key: string]: string | undefined } = {
     'ошибка': 'red',
     'выполнено': 'green',
-    'выполнено с замечаниями': 'blue',
-    'в процессе': 'purple',
-    'нет информаци': 'cyan',
+    'выполнено с замечаниями': undefined,
+    'в процессе': undefined,
+    'нет информаци': undefined,
 }
 const getStatusColor = (status: string) => {
     return colorMap[status];
 }
 
-const providerImage: { [key: string]: string } = {
-    'Email': email,
-    'СМС центр': smsc,
-    'Zvonok.com': bot,
-    'Telegram bot': zvonok,
+const providerImage: { [key: string]: any } = {
+    'Email': MailOutlined,
+    'СМС центр': MessageOutlined,
+    'Zvonok.com': PhoneOutlined,
+    'Telegram bot': SendOutlined,
 }
 
 const getProviderImage = (name: string) => {
@@ -243,5 +239,10 @@ const data = ref<DataItem[]>([
 .custom-color-placeholder::placeholder,
 .custom-color-placeholder .ant-select-selection-placeholder {
     color: var(--placeholder-color) !important;
+}
+
+.svg-w-full svg {
+    width: 100%;
+    height: 100%;
 }
 </style>

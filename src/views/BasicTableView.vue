@@ -4,7 +4,9 @@
     <a-table :columns="columns" :data-source="data" bordered :pagination="false" size="small">
       <template #title>
         <a-flex justify="flex-end">
-          <a-button type="primary" :icon="h(DownloadOutlined)"/>
+          <a-tooltip title="Выгрузить в Excel" placement="left">
+            <a-button :icon="h(DownloadOutlined)"></a-button>
+          </a-tooltip>
         </a-flex>
       </template>
       <template #headerCell="{ column }">
@@ -19,8 +21,8 @@
         </template>
         <template v-else-if="column.key === 'roles'">
           <span>
-            <a-tag v-for="role in record.roles" :key="role"
-              :color="role === 'новичок' ? 'volcano' : role.length > 5 ? 'geekblue' : 'green'">
+            <a-tag v-for="role in record.roles" :key="role" :bordered="false"
+              :style="{ backgroundColor: colors.colorPrimaryBg }">
               {{ role.toUpperCase() }}
             </a-tag>
           </span>
@@ -34,6 +36,9 @@
 import { ref, h } from 'vue';
 import PageTitle from '@/components/PageTitle/PageTitle.vue';
 import { DownloadOutlined } from '@ant-design/icons-vue';
+import { useThemeColors } from '@/hooks/useThemeColors';
+
+const { colors } = useThemeColors();
 
 interface DataItem {
   key: string;
