@@ -57,6 +57,9 @@
             <a-menu-item key="/components/error/submission">
                 <span>Ошибка отправки</span>
             </a-menu-item>
+            <a-menu-item key="/components/error/work">
+                <span>Технические работы</span>
+            </a-menu-item>
         </a-sub-menu>
         <a-menu-item key="/components/warningForm">
             <appstore-outlined />

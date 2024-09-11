@@ -95,8 +95,9 @@
                 <a-flex vertical gap="small">
                     <a-checkbox>Проверка на дубликаты</a-checkbox>
                     <div class="flex gap-0.5 items-center">
-                        <a-checkbox>Использовать пакетную отправку</a-checkbox>
-                        <a-tooltip title="Небесная сфера колеблет непреложный эффективный диаметp.">
+                        <a-checkbox>На адрес из сценария</a-checkbox>
+                        <a-tooltip
+                            title="Выберите, если хотите указать список получателей, которым всегда будет отправлено сообщение.">
                             <info-circle-outlined class="w-4 h-4 cursor-pointer relative top-[1px]" />
                         </a-tooltip>
                     </div>

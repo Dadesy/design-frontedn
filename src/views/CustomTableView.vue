@@ -20,12 +20,6 @@
           <p><strong>Профессия:</strong> {{ record.profession }}</p>
           <p><strong>Компания:</strong> {{ record.company }}</p>
           <p><strong>Email:</strong> {{ record.email }}</p>
-          <div v-if="editableData[record.key]" class="card-switches">
-            <a-checkbox v-model:checked="editableData[record.key].checkbox" class="card-checkbox">
-              Включить
-            </a-checkbox>
-            <a-switch v-model:checked="editableData[record.key].switch" class="card-switch" />
-          </div>
         </div>
         <div class="card-footer editable-row-operations">
           <a-button type="link" @click="openEditModal(record)">Редактировать</a-button>
@@ -43,7 +37,7 @@
 
         <template #title>
           <a-flex justify="flex-end">
-            <a-tooltip title="Выгрузить в Excel">
+            <a-tooltip title="Выгрузить в Excel" placement="left">
               <a-button :icon="h(DownloadOutlined)"></a-button>
             </a-tooltip>
           </a-flex>
@@ -66,11 +60,22 @@
             </template>
             <template v-else-if="column.dataIndex === 'operation'">
               <div class="editable-row-operations">
-                <a-button type="link" @click="openEditModal(record)" class="pl-0">Редактировать</a-button>
-                <a-popconfirm title="Вы уверены, что хотите удалить эту запись?" @confirm="deleteRow(record.key)"
-                  okText="Да" cancelText="Нет">
-                  <a-button type="link" class="pl-0">Удалить</a-button>
-                </a-popconfirm>
+                <a-dropdown-button>
+                  Действие
+                  <template #overlay>
+                    <a-menu @click="$event.stopPropagation()">
+                      <a-menu-item @click="openEditModal(record)">
+                        Редактировать
+                      </a-menu-item>
+                      <a-menu-item>
+                        <a-popconfirm title="Вы уверены, что хотите удалить эту запись?"
+                          @confirm="deleteRow(record.key)" okText="Да" cancelText="Нет">
+                          Удалить
+                        </a-popconfirm>
+                      </a-menu-item>
+                    </a-menu>
+                  </template>
+                </a-dropdown-button>
               </div>
             </template>
             <template v-else>
@@ -107,31 +112,44 @@
       </a-table>
     </div>
 
-    <a-modal v-model:visible="isModalVisible" title="Редактирование записи" @ok="save(editingKey)"
-      @cancel="closeEditModal(editingKey)">
-      <a-form-item label="Имя" v-if="editingKey && editableData[editingKey]">
-        <a-input v-model:value="editableData[editingKey].name" :disabled="!isEditing" />
-      </a-form-item>
-      <a-form-item label="Возраст" v-if="editingKey && editableData[editingKey]">
-        <a-input-number v-model:value="editableData[editingKey].age" :disabled="!isEditing" :min="0" />
-      </a-form-item>
-      <a-form-item label="Адрес" v-if="editingKey && editableData[editingKey]">
-        <a-select v-model:value="editableData[editingKey].address" :disabled="!isEditing">
-          <a-select-option value="Центральный парк">Центральный парк</a-select-option>
-          <a-select-option value="Парк на Краснопресненской набережной">Парк на Краснопресненской
-            набережной</a-select-option>
-          <a-select-option value="Парк Горького">Парк Горького</a-select-option>
-        </a-select>
-      </a-form-item>
-      <a-form-item label="Профессия" v-if="editingKey && editableData[editingKey]">
-        <a-input v-model:value="editableData[editingKey].profession" :disabled="!isEditing" />
-      </a-form-item>
-      <a-form-item label="Компания" v-if="editingKey && editableData[editingKey]">
-        <a-input v-model:value="editableData[editingKey].company" :disabled="!isEditing" />
-      </a-form-item>
-      <a-form-item label="Email" v-if="editingKey && editableData[editingKey]">
-        <a-input v-model:value="editableData[editingKey].email" :disabled="!isEditing" />
-      </a-form-item>
+    <a-modal v-model:visible="isModalVisible" title="Редактирование записи" class="text-center">
+      <a-form :label-col="{ span: 5 }" :wrapper-col="{ span: 19 }" class="mt-5 text-left">
+        <a-form-item label="Имя" v-if="editingKey && editableData[editingKey]">
+          <a-input v-model:value="editableData[editingKey].name" :disabled="!isEditing" />
+        </a-form-item>
+        <a-form-item label="Возраст" v-if="editingKey && editableData[editingKey]">
+          <a-input-number v-model:value="editableData[editingKey].age" :disabled="!isEditing" class="w-full" />
+        </a-form-item>
+        <a-form-item label="Адрес" v-if="editingKey && editableData[editingKey]">
+          <a-select v-model:value="editableData[editingKey].address" :disabled="!isEditing">
+            <a-select-option value="Центральный парк">Центральный парк</a-select-option>
+            <a-select-option value="Парк на Краснопресненской набережной">Парк на Краснопресненской
+              набережной</a-select-option>
+            <a-select-option value="Парк Горького">Парк Горького</a-select-option>
+          </a-select>
+        </a-form-item>
+        <a-form-item label="Профессия" v-if="editingKey && editableData[editingKey]">
+          <a-input v-model:value="editableData[editingKey].profession" :disabled="!isEditing" />
+        </a-form-item>
+        <a-form-item label="Компания" v-if="editingKey && editableData[editingKey]">
+          <a-input v-model:value="editableData[editingKey].company" :disabled="!isEditing" />
+        </a-form-item>
+        <a-form-item label="Email" v-if="editingKey && editableData[editingKey]">
+          <a-input v-model:value="editableData[editingKey].email" :disabled="!isEditing" />
+        </a-form-item>
+      </a-form>
+
+      <template #footer>
+        <div style="text-align: center;">
+          <a-button @click="closeEditModal(editingKey)">
+            Отмена
+          </a-button>
+          <a-button type="primary" @click="save(editingKey)">
+            Сохранить
+          </a-button>
+        </div>
+      </template>
+
     </a-modal>
   </div>
 </template>

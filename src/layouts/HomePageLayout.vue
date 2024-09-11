@@ -1,16 +1,19 @@
 <template>
     <the-layout>
         <template #logo>
-            <a href="/" class="block logo w-[120px]">
-                <the-logo class="block" />
-            </a>
+            <div class="flex gap-1 items-end">
+                <a href="/" class="block logo w-[110px]">
+                    <the-logo class="block" />
+                </a>
+                <span class="relative bottom-1 text-xs italic">дизайн</span>
+            </div>
         </template>
         <template #menu>
             <home-page-menu />
         </template>
         <template #router-view>
-            <home-info v-if="rout.path === '/'"/>
-            <RouterView v-else/>
+            <home-info v-if="rout.path === '/'" />
+            <RouterView v-else />
         </template>
     </the-layout>
 </template>
