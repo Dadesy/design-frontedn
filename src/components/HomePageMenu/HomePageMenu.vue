@@ -2,7 +2,7 @@
     <a-menu v-model:selectedKeys="selectedKeys" mode="inline" @click="handleMenuClick" class="components-menu">
         <a-menu-item key="/">
             <FileTextOutlined />
-            <span>Вводная информация</span>
+            <span>Дизайн-система</span>
         </a-menu-item>
     </a-menu>
 </template>
