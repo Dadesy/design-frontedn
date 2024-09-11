@@ -4,16 +4,6 @@
             <FileTextOutlined />
             <span>Вводная информация</span>
         </a-menu-item>
-
-        <a-menu-item key="/ff">
-            <FileTextOutlined />
-            <span>Правила использования</span>
-        </a-menu-item>
-
-        <a-menu-item key="/gg">
-            <FileTextOutlined />
-            <span>Еще что нибудь</span>
-        </a-menu-item>
     </a-menu>
 </template>
 
