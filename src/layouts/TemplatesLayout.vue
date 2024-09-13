@@ -22,6 +22,7 @@ import { useThemeColors } from '@/hooks/useThemeColors';
 const { colors } = useThemeColors();
 
 const logoColor = () => {
+        // @ts-ignore
       return colors.value.colorLogo || colors.value.colorText;
 }
 </script>
