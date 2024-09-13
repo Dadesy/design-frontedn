@@ -8,6 +8,7 @@ import Antd from 'ant-design-vue';
 import App from './App.vue';
 import router from './router';
 import maskDirective from "./directives/mask";
+import vInputStorage from './directives/vInputStorage';
 
 
 const app = createApp(App)
@@ -15,5 +16,6 @@ const app = createApp(App)
 app.use(router)
 app.use(Antd)
 app.directive('mask', maskDirective);
+app.directive('input-storage', vInputStorage);
 
 app.mount('#app')

@@ -1,5 +1,6 @@
 <template>
-    <a-space direction="vertical" :size="[0, 48]" class="flex-grow w-full">
+    <a-space direction="vertical" :size="[0, 48]" class="flex-grow w-full"
+        :style="{ '--color-menu-selected': colors.colorPrimaryText }">
         <a-layout class="flex-grow">
             <the-header>
                 <template #logo>
@@ -29,4 +30,18 @@
 import TheHeader from "@/components/TheHeader/TheHeader.vue";
 import TheFooter from "@/components/TheFooter/TheFooter.vue";
 import TheSider from '@/components/TheSider/TheSider.vue';
+import { useThemeColors } from '@/hooks/useThemeColors';
+
+const { colors } = useThemeColors();
 </script>
+
+<style>
+.ant-menu-light.ant-menu-horizontal>.ant-menu-item-selected,
+.ant-menu-light.ant-menu-horizontal>.ant-menu-submenu-selected,
+.ant-menu-light.ant-menu-horizontal>.ant-menu-item-selected::after,
+.ant-menu-light.ant-menu-horizontal>.ant-menu-submenu-selected::after,
+.ant-menu-light .ant-menu-item-selected,
+.ant-menu-light .ant-menu-submenu-selected >.ant-menu-submenu-title {
+    color: var(--color-menu-selected);
+}
+</style>

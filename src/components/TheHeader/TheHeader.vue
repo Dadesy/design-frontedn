@@ -8,7 +8,8 @@
 
       <a-flex align="center" gap="large">
         <pages-menu />
-        <div class="profile" :style="{ backgroundColor: colors.colorPrimary, color: colors.colorTextLightSolid }">
+        <div class="profile border-solid border"
+          :style="{ backgroundColor: colors.colorPrimary, color: colors.colorTextLightSolid, borderColor: colors.colorBorderSecondary }">
           АП
         </div>
       </a-flex>

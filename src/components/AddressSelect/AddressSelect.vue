@@ -1,22 +1,12 @@
 <template>
-    <a-select
-        class="w-full"
-        placeholder="Выберите вариант"
-        v-model="value"
-        :options="addresses"
-        :filter-option="false"
-        :not-found-content="null"
-        show-search
-        :option-filter-prop="'label'"
-        @search="onSearch"
-        :loading="addressLoad"
-    />
+    <a-select class="w-full" placeholder="Выберите вариант" v-model="value" :options="addresses" :filter-option="false"
+        :not-found-content="null" show-search :option-filter-prop="'label'" @search="onSearch" :loading="addressLoad" />
 </template>
 
 <script setup lang="ts">
-import {ref} from "vue";
+import { ref } from "vue";
 import axios from "axios";
-import {ADDRESS_API} from "@/constants/api-urls";
+import { ADDRESS_API_URL } from "@/constants/yamaps";
 let timeOut: number;
 
 const value = ref(null);
@@ -33,13 +23,12 @@ async function onSearch(v: string) {
     try {
         timeOut = setTimeout(async () => {
             addressLoad.value = true;
-            const res = await axios.get(`${ADDRESS_API}addressdetails=1&q=${v}&format=jsonv2&limit=100`);
-            if (res?.data && Array.isArray(res.data)) {
-                addresses.value = res.data.map((v: any) => {
-                    const result = `${v.address.village || ''} ${v.address.city || v.address.town || v.address.river ? 'р. ' + v.address.river : '' || ''} ${v.address.country || ''} ${v.address.state || ''}`
+            const res = await axios.get(`${ADDRESS_API_URL}${v}&format=json`);
+            if (res?.data?.response?.GeoObjectCollection?.featureMember) {
+                addresses.value = res.data.response.GeoObjectCollection.featureMember.map((v: any) => {
                     return {
-                        label: v.display_name,
-                        value: v.display_name,
+                        label: `${v.GeoObject.name} ${v.GeoObject.description || ''}`,
+                        value: `${v.GeoObject.name} ${v.GeoObject.description || ''}`
                     }
                 });
             }

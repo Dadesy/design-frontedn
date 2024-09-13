@@ -41,7 +41,7 @@
                 <label class="flex flex-col gap-2 mb-5">
                     <span>Маска времени</span>
                     <a-time-picker v-model="valueTime" format="HH:mm" v-mask="'##:##'" class="w-full"
-                        placeholder="__:__" />
+                        placeholder="__:__" :minuteStep="5" />
                 </label>
 
                 <label class="flex flex-col gap-2 mb-5">
@@ -164,7 +164,9 @@
 
         <a-card class="w-full mt-5">
             <a-flex gap="small">
-                <a-button type="primary">Сохранить</a-button>
+                <a-button type="primary" @click="() => {
+                    console.log(valueText);
+                }">Сохранить</a-button>
                 <a-button>Отмена</a-button>
             </a-flex>
         </a-card>
@@ -190,6 +192,7 @@ const optionsMultiple = [{ value: 'Иван' }, { value: 'Марина' }, { val
 const valueBirthday = ref<Dayjs>();
 const valueTime = ref(dayjs('00:00', 'HH:mm'));
 const switched = ref<boolean>(false);
+const valueText = ref<string>('');
 
 const fileList = ref([]);
 const loading = ref<boolean>(false);
@@ -292,5 +295,10 @@ const beforeUpload = (file: UploadProps['fileList'][number]) => {
 .ant-upload-select-picture-card .ant-upload-text {
     margin-top: 8px;
     color: #666;
+}
+</style>
+<style>
+.ant-picker-dropdown .ant-picker-time-panel-column::after {
+    display: none;
 }
 </style>
