@@ -60,7 +60,19 @@
             </template>
             <template v-else-if="column.dataIndex === 'operation'">
               <div class="editable-row-operations">
-                <a-dropdown-button>
+                <a-flex gap="small" justify="center" class="w-full">
+                  <a-tooltip title="Редактировать" placement="left">
+                    <a-button :icon="h(EditOutlined)" @click="openEditModal(record)"></a-button>
+                  </a-tooltip>
+
+                  <a-tooltip title="Удалить" placement="left">
+                    <a-popconfirm title="Вы уверены, что хотите удалить эту запись?" @confirm="deleteRow(record.key)"
+                      okText="Да" cancelText="Нет">
+                      <a-button :icon="h(DeleteOutlined)"></a-button>
+                    </a-popconfirm>
+                  </a-tooltip>
+                </a-flex>
+                <!-- <a-dropdown-button>
                   Действие
                   <template #overlay>
                     <a-menu @click="$event.stopPropagation()">
@@ -75,7 +87,7 @@
                       </a-menu-item>
                     </a-menu>
                   </template>
-                </a-dropdown-button>
+                </a-dropdown-button> -->
               </div>
             </template>
             <template v-else>
@@ -157,7 +169,7 @@
 <script lang="ts" setup>
 import { cloneDeep } from 'lodash';
 import { reactive, ref, onMounted, onBeforeUnmount, h } from 'vue';
-import { SearchOutlined, DownloadOutlined } from '@ant-design/icons-vue';
+import { SearchOutlined, DownloadOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons-vue';
 import { message } from 'ant-design-vue';
 import type { UnwrapRef } from 'vue';
 import PageTitle from '@/components/PageTitle/PageTitle.vue';
@@ -268,7 +280,7 @@ const columns = [
     width: '12%',
   },
   {
-    title: 'Операции',
+    title: '',
     dataIndex: 'operation',
     key: 'operation',
   },

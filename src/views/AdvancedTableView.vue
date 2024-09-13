@@ -54,22 +54,20 @@
                 <a-button type="link" @click="cancel(record.key)">Отмена</a-button>
               </template>
               <template v-else>
-                <a-dropdown-button>
-                  Действие
-                  <template #overlay>
-                    <a-menu @click="$event.stopPropagation()">
-                      <a-menu-item @click="edit(record.key)">
-                        Редактировать
-                      </a-menu-item>
-                      <a-menu-item>
-                        <a-popconfirm title="Вы уверены, что хотите удалить эту запись?"
-                          @confirm="deleteRow(record.key)" okText="Да" cancelText="Нет">
-                          Удалить
-                        </a-popconfirm>
-                      </a-menu-item>
-                    </a-menu>
-                  </template>
-                </a-dropdown-button>
+
+                <a-flex gap="small" justify="center" class="w-full">
+                  <a-tooltip title="Редактировать" placement="left">
+                    <a-button :icon="h(EditOutlined)" @click="edit(record.key)"></a-button>
+                  </a-tooltip>
+
+                  <a-tooltip title="Удалить" placement="left">
+                    <a-popconfirm title="Вы уверены, что хотите удалить эту запись?" @confirm="deleteRow(record.key)"
+                      okText="Да" cancelText="Нет">
+                      <a-button :icon="h(DeleteOutlined)"></a-button>
+                    </a-popconfirm>
+                  </a-tooltip>
+                </a-flex>
+
               </template>
             </div>
           </template>
@@ -103,7 +101,7 @@
 <script lang="ts" setup>
 import { cloneDeep } from 'lodash';
 import { reactive, ref, onMounted, type UnwrapRef, h } from 'vue';
-import { SearchOutlined, DownloadOutlined } from '@ant-design/icons-vue';
+import { SearchOutlined, DownloadOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons-vue';
 import { message } from 'ant-design-vue';
 import type { TableColumnType } from 'ant-design-vue';
 import type { Key } from 'ant-design-vue/es/table/interface';
@@ -220,7 +218,7 @@ const columns: ColumnType[] = [
     width: '15%',
   },
   {
-    title: 'operation',
+    title: '',
     dataIndex: 'operation',
     key: 'operation',
   },

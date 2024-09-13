@@ -11,8 +11,10 @@ export interface IThemeItem {
 
 export const THEME_LIST: ITheme = {
     'По умолчанию': {
-        mainColor: '#1890ff',
-        token: undefined
+        mainColor: '#4079c9',
+        token: {
+            "colorPrimary": "#4079c9",
+        }
     },
     'Соц сеть ЭФКО': {
         mainColor: '#0f766e',
@@ -20,17 +22,19 @@ export const THEME_LIST: ITheme = {
             "borderRadius": 6,
             "colorPrimary": "#0f766e",
             "colorInfo": "#0f766e",
-            "colorPrimaryBg": "#edf3f3"
+            "colorPrimaryBg": "#edf3f3",
+            "controlOutline": "transparent",
         }
     },
     'ИСУИ': {
-        mainColor: '#73a480',
+        mainColor: '#148F2B',
         token: {
-            "colorPrimary": "#73a480",
-            "colorInfo": "#73a480",
-            "colorTextBase": "#222222",
-            "wireframe": true,
-            "borderRadius": 6
+            "colorPrimary": "#058241",
+            "colorInfo": "#8ac460",
+            "controlOutline": "transparent",
+            "colorPrimaryBg": "#8ac460",
+            "colorPrimaryText": "#ffffff",
+            "colorLogo": "#036231"
         },
     },
     'QMoex': {
@@ -41,26 +45,29 @@ export const THEME_LIST: ITheme = {
             "colorTextBase": "#1f2937",
             "wireframe": false,
             "colorBgBase": "#ffffff",
-            "borderRadius": 6
+            "borderRadius": 6,
+            "controlOutline": "transparent",
         }
     },
     "Digital solutions": {
-        mainColor: '#edcb4a',
+        mainColor: '#ffe400',
         token: {
-            "colorPrimary": "#edcb4a",
-            "colorInfo": "#edcb4a",
-            "colorTextBase": "#131310",
-            "wireframe": false,
-            "colorBgBase": "#ffffff",
-            "borderRadius": 6,
-            "sizeStep": 4,
-            "sizeUnit": 4
+            "colorPrimary": "#000000",
+            "colorPrimaryBg": "#ffe400",
+            "controlOutline": "transparent",
+            "colorPrimaryText": "#3e3e3e",
+            "colorTextBase": "#1f1f1f",
         }
     },
-    "Темная мягкая": {
-        mainColor: '#37393E',
+    "Темная": {
+        mainColor: '#4c5158',
         token: {
-            "colorPrimary": "#73767C",
+            "colorPrimary": "#4c5158",
+            "colorPrimaryText": "#B9BBBE",
+            "colorBorder": "rgba(255, 255, 255, 0.12)",
+            "controlOutline": "transparent",
+            "colorBorderSecondary": "rgba(255, 255, 255, 0.12)",
+            "colorText": "#eeeeee",
             "colorInfo": "#73767C",
             "colorTextBase": "#B9BBBE",
             "wireframe": false,
@@ -70,21 +77,6 @@ export const THEME_LIST: ITheme = {
             "sizeUnit": 4,
             "controlItemBgActive": "#2d2f33",
             "colorPrimaryBg": "#2d2f33",
-        }
-    },
-    "Темная контрастная": {
-        mainColor: '#1F1F1F',
-        token: {
-            "colorPrimary": "#73767C",
-            "colorInfo": "#73767C",
-            "colorTextBase": "#FFFFFF",
-            "wireframe": false,
-            "colorBgBase": "#1F1F1F",
-            "borderRadius": 6,
-            "sizeStep": 4,
-            "sizeUnit": 4,
-            "controlItemBgActive": "#151515",
-            "colorPrimaryBg": "#151515",
         }
     }
 }
