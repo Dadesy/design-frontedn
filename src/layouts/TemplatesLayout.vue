@@ -19,10 +19,10 @@ import TheLayout from './TheLayout.vue';
 import TheLogo from '@/components/TheLogo/TheLogo.vue';
 import TemplatesMenu from '@/components/TemplatesMenu/TemplatesMenu.vue';
 import { useThemeColors } from '@/hooks/useThemeColors';
+import type { ICustomColors } from '@/utils/themes/themes';
 const { colors } = useThemeColors();
 
 const logoColor = () => {
-        // @ts-ignore
-      return colors.value.colorLogo || colors.value.colorText;
+      return (colors.value as ICustomColors).colorLogo || colors.value.colorText;
 }
 </script>
