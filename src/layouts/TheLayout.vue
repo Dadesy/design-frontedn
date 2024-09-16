@@ -1,6 +1,6 @@
 <template>
     <a-space direction="vertical" :size="[0, 48]" class="flex-grow w-full"
-        :style="{ '--color-menu-selected': colors.colorPrimaryText }">
+        :style="{ '--color-menu-selected': (colors as ICustomColors).colorSelectedMenu, '--bg-menu-selected': (colors as ICustomColors).mainBgColor ? (colors as ICustomColors).mainBgColor : colors.colorPrimaryBg }">
         <a-layout class="flex-grow">
             <the-header>
                 <template #logo>
@@ -31,6 +31,7 @@ import TheHeader from "@/components/TheHeader/TheHeader.vue";
 import TheFooter from "@/components/TheFooter/TheFooter.vue";
 import TheSider from '@/components/TheSider/TheSider.vue';
 import { useThemeColors } from '@/hooks/useThemeColors';
+import type { ICustomColors } from "@/utils/themes/themes";
 
 const { colors } = useThemeColors();
 </script>
@@ -43,5 +44,9 @@ const { colors } = useThemeColors();
 .ant-menu-light .ant-menu-item-selected,
 .ant-menu-light .ant-menu-submenu-selected >.ant-menu-submenu-title {
     color: var(--color-menu-selected);
+}
+
+.ant-menu-light .ant-menu-item-selected {
+    background-color: var(--bg-menu-selected);
 }
 </style>

@@ -164,9 +164,7 @@
 
         <a-card class="w-full mt-5">
             <a-flex gap="small">
-                <a-button type="primary" @click="() => {
-                    console.log(valueText);
-                }">Сохранить</a-button>
+                <a-button type="primary">Сохранить</a-button>
                 <a-button>Отмена</a-button>
             </a-flex>
         </a-card>
@@ -192,7 +190,6 @@ const optionsMultiple = [{ value: 'Иван' }, { value: 'Марина' }, { val
 const valueBirthday = ref<Dayjs>();
 const valueTime = ref(dayjs('00:00', 'HH:mm'));
 const switched = ref<boolean>(false);
-const valueText = ref<string>('');
 
 const fileList = ref([]);
 const loading = ref<boolean>(false);

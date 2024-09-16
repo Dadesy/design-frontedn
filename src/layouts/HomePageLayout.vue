@@ -25,11 +25,11 @@ import HomePageMenu from '@/components/HomePageMenu/HomePageMenu.vue';
 import { RouterView, useRoute } from 'vue-router';
 import HomeInfo from '@/views/HomeInfo.vue';
 import { useThemeColors } from '@/hooks/useThemeColors';
+import type { ICustomColors } from '@/utils/themes/themes';
 const { colors } = useThemeColors();
 
 const logoColor = () => {
-        // @ts-ignore
-      return colors.value.colorLogo || colors.value.colorText;
+      return (colors.value as ICustomColors).colorLogo || colors.value.colorText;
 }
 
 const rout = useRoute();

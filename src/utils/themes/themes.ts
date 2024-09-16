@@ -1,3 +1,5 @@
+import type { AliasToken } from "ant-design-vue/es/theme/interface"
+
 export interface ITheme {
     [key: string]: IThemeItem
 }
@@ -9,11 +11,18 @@ export interface IThemeItem {
     } | undefined
 }
 
+export interface ICustomColors extends AliasToken {
+    colorLogo: string;
+    colorSelectedMenu: string;
+    mainBgColor: string;
+}
+
 export const THEME_LIST: ITheme = {
     'По умолчанию': {
         mainColor: '#4079c9',
         token: {
             "colorPrimary": "#4079c9",
+            "colorSelectedMenu": "#4079c9",
         }
     },
     'Соц сеть ЭФКО': {
@@ -24,17 +33,20 @@ export const THEME_LIST: ITheme = {
             "colorInfo": "#0f766e",
             "colorPrimaryBg": "#edf3f3",
             "controlOutline": "transparent",
+            "colorSelectedMenu": "#0f766e"
         }
     },
     'ИСУИ': {
         mainColor: '#148F2B',
         token: {
-            "colorPrimary": "#058241",
+            "colorPrimary": "#78c11a",
             "colorInfo": "#8ac460",
             "controlOutline": "transparent",
             "colorPrimaryBg": "#8ac460",
             "colorPrimaryText": "#ffffff",
-            "colorLogo": "#036231"
+            "colorLogo": "#036231",
+            "colorSelectedMenu": "#036231",
+            "mainBgColor": "#d8ecb1"
         },
     },
     'QMoex': {
@@ -47,16 +59,18 @@ export const THEME_LIST: ITheme = {
             "colorBgBase": "#ffffff",
             "borderRadius": 6,
             "controlOutline": "transparent",
+            "colorSelectedMenu": "#805dca"
         }
     },
     "Digital solutions": {
         mainColor: '#ffe400',
         token: {
-            "colorPrimary": "#000000",
-            "colorPrimaryBg": "#ffe400",
+            "colorPrimary": "#5f5f5f",
+            "colorPrimaryBg": "#fcfc6f",
             "controlOutline": "transparent",
             "colorPrimaryText": "#3e3e3e",
             "colorTextBase": "#1f1f1f",
+            "colorSelectedMenu": "#5f5f5f"
         }
     },
     "Темная": {
@@ -77,6 +91,7 @@ export const THEME_LIST: ITheme = {
             "sizeUnit": 4,
             "controlItemBgActive": "#2d2f33",
             "colorPrimaryBg": "#2d2f33",
+            "colorSelectedMenu": "#B9BBBE"
         }
     }
 }

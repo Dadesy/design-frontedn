@@ -1,6 +1,6 @@
 <template>
   <div class="rounded-none pl-6 pr-6 border-b border-solid"
-    :style="{ borderColor: colors.colorBorderSecondary, backgroundColor: colors.colorPrimaryBg }">
+    :style="{ borderColor: colors.colorBorderSecondary, backgroundColor: (colors as ICustomColors).mainBgColor ? (colors as ICustomColors).mainBgColor : colors.colorPrimaryBg }">
     <div class="flex items-center justify-between">
       <div class="w-[226px]">
         <slot name="logo"></slot>
@@ -18,6 +18,7 @@
 </template>
 
 <script lang="ts" setup>
+import type { ICustomColors } from '@/utils/themes/themes';
 import PagesMenu from '../PagesMenu/PagesMenu.vue';
 import { useThemeColors } from '@/hooks/useThemeColors';
 
