@@ -1,6 +1,6 @@
 <template>
     <page-title title="Пользователи" />
-    <div class="p-5" :style="{ '--placeholder-color': colors.colorText }">
+    <div class="p-5">
 
         <a-card class="w-full overflow-hidden">
             <a-flex gap="middle" vertical>
@@ -25,10 +25,10 @@
 
                     </a-flex>
                     <a-flex gap="small">
+                        <a-button type="primary" :icon="h(PlusOutlined)">Добавить</a-button>
                         <a-tooltip title="Выгрузить в Excel">
                             <a-button :icon="h(DownloadOutlined)"></a-button>
                         </a-tooltip>
-                        <a-button type="primary" :icon="h(PlusOutlined)">Добавить</a-button>
                     </a-flex>
                 </a-flex>
 
@@ -60,7 +60,6 @@
 <script setup lang="ts">
 import { ref, h } from 'vue';
 import PageTitle from '@/components/PageTitle/PageTitle.vue';
-import { useThemeColors } from '@/hooks/useThemeColors';
 import { PlusOutlined, DownloadOutlined } from '@ant-design/icons-vue';
 import { Typography } from 'ant-design-vue';
 
@@ -73,7 +72,6 @@ import user6 from "../assets/img/users/6.png";
 import user7 from "../assets/img/users/7.png";
 import user8 from "../assets/img/users/8.png";
 
-const { colors } = useThemeColors();
 const { Text } = Typography;
 
 interface DataItem {

@@ -1,6 +1,5 @@
 <template>
-    <a-space direction="vertical" :size="[0, 48]" class="flex-grow w-full"
-        :style="{ '--color-menu-selected': (colors as ICustomColors).colorSelectedMenu, '--bg-menu-selected': (colors as ICustomColors).mainBgColor ? (colors as ICustomColors).mainBgColor : colors.colorPrimaryBg }">
+    <a-space direction="vertical" :size="[0, 48]" class="flex-grow w-full">
         <a-layout class="flex-grow">
             <the-header>
                 <template #logo>
@@ -34,6 +33,10 @@ import { useThemeColors } from '@/hooks/useThemeColors';
 import type { ICustomColors } from "@/utils/themes/themes";
 
 const { colors } = useThemeColors();
+
+document.body.style.setProperty('--bg-menu-selected', (colors.value as ICustomColors).mainBgColor ? (colors.value as ICustomColors).mainBgColor : colors.value.colorPrimaryBg);
+document.body.style.setProperty('--color-menu-selected', (colors.value as ICustomColors).colorSelectedMenu);
+document.body.style.setProperty('--placeholder-color', colors.value.colorText);
 </script>
 
 <style>
@@ -42,11 +45,12 @@ const { colors } = useThemeColors();
 .ant-menu-light.ant-menu-horizontal>.ant-menu-item-selected::after,
 .ant-menu-light.ant-menu-horizontal>.ant-menu-submenu-selected::after,
 .ant-menu-light .ant-menu-item-selected,
-.ant-menu-light .ant-menu-submenu-selected >.ant-menu-submenu-title {
+.ant-menu-light .ant-menu-submenu-selected>.ant-menu-submenu-title {
     color: var(--color-menu-selected);
 }
 
-.ant-menu-light .ant-menu-item-selected {
+.ant-menu-light .ant-menu-item-selected,
+.ant-select-dropdown .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
     background-color: var(--bg-menu-selected);
 }
 </style>
