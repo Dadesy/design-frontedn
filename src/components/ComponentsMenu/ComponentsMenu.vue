@@ -13,8 +13,8 @@
                     <span>Таблица</span>
                 </span>
             </template>
-            <a-menu-item key="/components/table/basic">
-                <span>Базовая</span>
+            <a-menu-item key="/components/table/editable">
+                <span>Редактируемая</span>
             </a-menu-item>
             <a-menu-item key="/components/table/advanced">
                 <span>Расширенная</span>

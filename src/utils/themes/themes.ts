@@ -18,14 +18,14 @@ export interface ICustomColors extends AliasToken {
 }
 
 export const THEME_LIST: ITheme = {
-    'По умолчанию': {
+    'Морской бриз': {
         mainColor: '#4079c9',
         token: {
             "colorPrimary": "#4079c9",
             "colorSelectedMenu": "#4079c9",
         }
     },
-    'Соц сеть ЭФКО': {
+    'Лесная тропа': {
         mainColor: '#0f766e',
         token: {
             "borderRadius": 6,
@@ -36,7 +36,7 @@ export const THEME_LIST: ITheme = {
             "colorSelectedMenu": "#0f766e"
         }
     },
-    'ИСУИ': {
+    'Летний луг': {
         mainColor: '#148F2B',
         token: {
             "colorPrimary": "#78c11a",
@@ -49,7 +49,7 @@ export const THEME_LIST: ITheme = {
             "mainBgColor": "#d8ecb1"
         },
     },
-    'QMoex': {
+    'Полет бабочки': {
         mainColor: '#805dca',
         token: {
             "colorPrimary": "#805dca",
@@ -62,7 +62,7 @@ export const THEME_LIST: ITheme = {
             "colorSelectedMenu": "#805dca"
         }
     },
-    "Digital solutions": {
+    "Солнечный переулок": {
         mainColor: '#ffe400',
         token: {
             "colorPrimary": "#5f5f5f",
@@ -73,7 +73,7 @@ export const THEME_LIST: ITheme = {
             "colorSelectedMenu": "#5f5f5f"
         }
     },
-    "Темная": {
+    "Полночный сумрак": {
         mainColor: '#4c5158',
         token: {
             "colorPrimary": "#4c5158",
