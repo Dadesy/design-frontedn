@@ -1,32 +1,45 @@
 <template>
   <page-title title="Предупреждающее окно" />
   <div class="p-5">
-    <a-card class="max-w-2xl mx-auto">
-      <a-form :model="formState" :label-col="labelCol" :wrapper-col="wrapperCol">
-        <a-form-item label="Имя пользователя">
+    <a-card class="max-w-screen-sm mx-auto">
+      <a-form :model="formState">
+
+        <label class="flex flex-col gap-2 mb-5">
+          <span>Имя пользователя</span>
           <a-input v-model:value="formState.username" placeholder="Введите имя пользователя" />
-        </a-form-item>
-        <a-form-item label="Email">
+        </label>
+
+        <label class="flex flex-col gap-2 mb-5">
+          <span>Email</span>
           <a-input v-model:value="formState.email" type="email" placeholder="Введите email" @blur="validateEmail"
             :status="emailError ? 'error' : undefined" @input="emailInputHandler" />
           <div v-if="emailError" class="text-red-500">{{ emailError }}</div>
-        </a-form-item>
-        <a-form-item label="Пароль">
+        </label>
+
+        <label class="flex flex-col gap-2 mb-5">
+          <span>Пароль</span>
           <a-input-password v-model:value="formState.password" placeholder="Введите пароль" />
-        </a-form-item>
-        <a-form-item label="Подтверждение пароля">
+        </label>
+
+        <label class="flex flex-col gap-2 mb-5">
+          <span>Подтверждение пароля</span>
           <a-input-password v-model:value="formState.confirmPassword" placeholder="Подтвердите пароль" />
-        </a-form-item>
-        <a-form-item label="Роль пользователя">
+        </label>
+
+        <label class="flex flex-col gap-2 mb-5">
+          <span>Роль пользователя</span>
           <a-radio-group v-model:value="formState.role">
             <a-radio value="admin">Администратор</a-radio>
             <a-radio value="user">Пользователь</a-radio>
             <a-radio value="guest">Гость</a-radio>
           </a-radio-group>
-        </a-form-item>
-        <a-form-item label="Согласие с условиями">
+        </label>
+
+        <label class="flex flex-col gap-2 mb-5">
+          <span>Согласие с условиями</span>
           <a-checkbox v-model:checked="formState.agreement">Я согласен с условиями использования</a-checkbox>
-        </a-form-item>
+        </label>
+
         <a-form-item :wrapper-col="{ span: 14, offset: 4 }" class="text-center">
           <a-button type="primary" @click="onSubmit">Создать</a-button>
           <a-button style="margin-left: 10px">Отмена</a-button>
@@ -37,7 +50,7 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, toRaw, onBeforeUnmount, watch, onMounted, ref } from 'vue';
+import { reactive, onBeforeUnmount, watch, onMounted, ref } from 'vue';
 import { Modal } from 'ant-design-vue';
 import type { UnwrapRef } from 'vue';
 import { onBeforeRouteLeave } from 'vue-router';
@@ -145,9 +158,6 @@ watch(
   },
   { deep: true }
 );
-
-const labelCol = { xs: { span: 24 }, sm: { span: 8 } };
-const wrapperCol = { xs: { span: 24 }, sm: { span: 16 } };
 
 </script>
 

@@ -1,7 +1,8 @@
 import { createRouter, createWebHistory } from "vue-router";
 import FormView from "@/views/FormView.vue";
 import AdvancedTableView from "@/views/AdvancedTableView.vue";
-import BasicTableView from "@/views/BasicTableView.vue";
+import EditableTable from "@/views/EditableTable/EditableTable.vue";
+import EditableTableForm from "@/views/EditableTable/EditableTableForm.vue";
 import CustomTableView from "@/views/CustomTableView.vue";
 import CalendarView from "@/views/CalendarView.vue";
 import SuccessPagView from "@/views/SuccessPageView.vue";
@@ -63,11 +64,19 @@ const router = createRouter({
               },
             },
             {
-              path: "/components/table/basic",
-              name: "basicTable",
-              component: BasicTableView,
+              path: "/components/table/editable",
+              name: "editableTable",
+              component: EditableTable,
               meta: {
-                breadcrumbName: "Базовая таблица",
+                breadcrumbName: "Редактируемая таблица",
+              },
+            },
+            {
+              path: "/components/table/editable/:key",
+              name: "editableTableForm",
+              component: EditableTableForm,
+              meta: {
+                breadcrumbName: "Редактирование",
               },
             },
             {

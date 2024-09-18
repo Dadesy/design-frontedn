@@ -1,6 +1,6 @@
 <template>
     <page-title title="Журнал обменов" />
-    <div class="p-5" :style="{ '--placeholder-color': colors.colorText }">
+    <div class="p-5">
         <div class="flex gap-2 items-center mb-5">
             <a-switch v-model:checked="switched" />
             Расширенный фильтр
@@ -34,10 +34,10 @@
                     </a-flex>
 
                     <a-flex gap="small" align="center">
+                        <a-button type="primary" :icon="h(PlusOutlined)">Добавить</a-button>
                         <a-tooltip title="Выгрузить в Excel">
                             <a-button :icon="h(DownloadOutlined)"></a-button>
                         </a-tooltip>
-                        <span :style="{ color: colors.colorTextDescription }">Найдено 301 записей</span>
                     </a-flex>
                 </a-flex>
 
@@ -69,7 +69,7 @@
 import { ref, h } from 'vue';
 import PageTitle from '@/components/PageTitle/PageTitle.vue';
 import { useThemeColors } from '@/hooks/useThemeColors';
-import { DownloadOutlined, SendOutlined, PhoneOutlined, MessageOutlined, MailOutlined } from '@ant-design/icons-vue';
+import { DownloadOutlined, SendOutlined, PhoneOutlined, MessageOutlined, MailOutlined, PlusOutlined } from '@ant-design/icons-vue';
 
 const { colors } = useThemeColors();
 

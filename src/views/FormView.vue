@@ -41,7 +41,7 @@
                 <label class="flex flex-col gap-2 mb-5">
                     <span>Маска времени</span>
                     <a-time-picker v-model="valueTime" format="HH:mm" v-mask="'##:##'" class="w-full"
-                        placeholder="__:__" />
+                        placeholder="__:__" :minuteStep="5" />
                 </label>
 
                 <label class="flex flex-col gap-2 mb-5">
@@ -292,5 +292,10 @@ const beforeUpload = (file: UploadProps['fileList'][number]) => {
 .ant-upload-select-picture-card .ant-upload-text {
     margin-top: 8px;
     color: #666;
+}
+</style>
+<style>
+.ant-picker-dropdown .ant-picker-time-panel-column::after {
+    display: none;
 }
 </style>

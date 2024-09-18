@@ -1,3 +1,5 @@
+import type { AliasToken } from "ant-design-vue/es/theme/interface"
+
 export interface ITheme {
     [key: string]: IThemeItem
 }
@@ -9,31 +11,45 @@ export interface IThemeItem {
     } | undefined
 }
 
+export interface ICustomColors extends AliasToken {
+    colorLogo: string;
+    colorSelectedMenu: string;
+    mainBgColor: string;
+}
+
 export const THEME_LIST: ITheme = {
-    'По умолчанию': {
-        mainColor: '#1890ff',
-        token: undefined
+    'Морской бриз': {
+        mainColor: '#4079c9',
+        token: {
+            "colorPrimary": "#4079c9",
+            "colorSelectedMenu": "#4079c9",
+        }
     },
-    'Соц сеть ЭФКО': {
+    'Лесная тропа': {
         mainColor: '#0f766e',
         token: {
             "borderRadius": 6,
             "colorPrimary": "#0f766e",
             "colorInfo": "#0f766e",
-            "colorPrimaryBg": "#edf3f3"
+            "colorPrimaryBg": "#edf3f3",
+            "controlOutline": "transparent",
+            "colorSelectedMenu": "#0f766e"
         }
     },
-    'ИСУИ': {
-        mainColor: '#73a480',
+    'Летний луг': {
+        mainColor: '#148F2B',
         token: {
-            "colorPrimary": "#73a480",
-            "colorInfo": "#73a480",
-            "colorTextBase": "#222222",
-            "wireframe": true,
-            "borderRadius": 6
+            "colorPrimary": "#78c11a",
+            "colorInfo": "#8ac460",
+            "controlOutline": "transparent",
+            "colorPrimaryBg": "#8ac460",
+            "colorPrimaryText": "#ffffff",
+            "colorLogo": "#036231",
+            "colorSelectedMenu": "#036231",
+            "mainBgColor": "#d8ecb1"
         },
     },
-    'QMoex': {
+    'Полет бабочки': {
         mainColor: '#805dca',
         token: {
             "colorPrimary": "#805dca",
@@ -41,26 +57,31 @@ export const THEME_LIST: ITheme = {
             "colorTextBase": "#1f2937",
             "wireframe": false,
             "colorBgBase": "#ffffff",
-            "borderRadius": 6
-        }
-    },
-    "Digital solutions": {
-        mainColor: '#edcb4a',
-        token: {
-            "colorPrimary": "#edcb4a",
-            "colorInfo": "#edcb4a",
-            "colorTextBase": "#131310",
-            "wireframe": false,
-            "colorBgBase": "#ffffff",
             "borderRadius": 6,
-            "sizeStep": 4,
-            "sizeUnit": 4
+            "controlOutline": "transparent",
+            "colorSelectedMenu": "#805dca"
         }
     },
-    "Темная мягкая": {
-        mainColor: '#37393E',
+    "Солнечный переулок": {
+        mainColor: '#ffe400',
         token: {
-            "colorPrimary": "#73767C",
+            "colorPrimary": "#5f5f5f",
+            "colorPrimaryBg": "#fcfc6f",
+            "controlOutline": "transparent",
+            "colorPrimaryText": "#3e3e3e",
+            "colorTextBase": "#1f1f1f",
+            "colorSelectedMenu": "#5f5f5f"
+        }
+    },
+    "Полночный сумрак": {
+        mainColor: '#4c5158',
+        token: {
+            "colorPrimary": "#4c5158",
+            "colorPrimaryText": "#B9BBBE",
+            "colorBorder": "rgba(255, 255, 255, 0.12)",
+            "controlOutline": "transparent",
+            "colorBorderSecondary": "rgba(255, 255, 255, 0.12)",
+            "colorText": "#eeeeee",
             "colorInfo": "#73767C",
             "colorTextBase": "#B9BBBE",
             "wireframe": false,
@@ -70,21 +91,7 @@ export const THEME_LIST: ITheme = {
             "sizeUnit": 4,
             "controlItemBgActive": "#2d2f33",
             "colorPrimaryBg": "#2d2f33",
-        }
-    },
-    "Темная контрастная": {
-        mainColor: '#1F1F1F',
-        token: {
-            "colorPrimary": "#73767C",
-            "colorInfo": "#73767C",
-            "colorTextBase": "#FFFFFF",
-            "wireframe": false,
-            "colorBgBase": "#1F1F1F",
-            "borderRadius": 6,
-            "sizeStep": 4,
-            "sizeUnit": 4,
-            "controlItemBgActive": "#151515",
-            "colorPrimaryBg": "#151515",
+            "colorSelectedMenu": "#B9BBBE"
         }
     }
 }

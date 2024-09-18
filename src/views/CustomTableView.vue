@@ -23,10 +23,7 @@
         </div>
         <div class="card-footer editable-row-operations">
           <a-button type="link" @click="openEditModal(record)">Редактировать</a-button>
-          <a-popconfirm title="Вы уверены, что хотите удалить эту запись?" @confirm="deleteRow(record.key)" okText="Да"
-            cancelText="Нет">
-            <a-button type="link">Удалить</a-button>
-          </a-popconfirm>
+          <a-button type="link" @click="confirmDelete(record.key)">Удалить</a-button>
         </div>
       </div>
     </div>
@@ -37,9 +34,12 @@
 
         <template #title>
           <a-flex justify="flex-end">
-            <a-tooltip title="Выгрузить в Excel" placement="left">
-              <a-button :icon="h(DownloadOutlined)"></a-button>
-            </a-tooltip>
+            <a-flex gap="small">
+              <a-button type="primary" :icon="h(PlusOutlined)">Добавить</a-button>
+              <a-tooltip title="Выгрузить в Excel" placement="left">
+                <a-button :icon="h(DownloadOutlined)"></a-button>
+              </a-tooltip>
+            </a-flex>
           </a-flex>
         </template>
 
@@ -60,22 +60,33 @@
             </template>
             <template v-else-if="column.dataIndex === 'operation'">
               <div class="editable-row-operations">
-                <a-dropdown-button>
-                  Действие
-                  <template #overlay>
-                    <a-menu @click="$event.stopPropagation()">
-                      <a-menu-item @click="openEditModal(record)">
-                        Редактировать
-                      </a-menu-item>
-                      <a-menu-item>
-                        <a-popconfirm title="Вы уверены, что хотите удалить эту запись?"
-                          @confirm="deleteRow(record.key)" okText="Да" cancelText="Нет">
-                          Удалить
-                        </a-popconfirm>
-                      </a-menu-item>
-                    </a-menu>
-                  </template>
-                </a-dropdown-button>
+                <a-flex gap="small" justify="center" class="w-full">
+                  <a-tooltip title="Редактировать" placement="left">
+                    <a-button :icon="h(EditOutlined)" @click="openEditModal(record)"></a-button>
+                  </a-tooltip>
+
+                  <a-tooltip title="Удалить" placement="left">
+                    <a-button :icon="h(DeleteOutlined)" @click="confirmDelete(record.key)"></a-button>
+                  </a-tooltip>
+
+                  <a-dropdown>
+                    <a-button :icon="h(EllipsisOutlined)"></a-button>
+                    <template #overlay>
+                      <a-menu>
+                        <a-menu-item key="1">
+                          Просмотр
+                        </a-menu-item>
+                        <a-menu-item key="2">
+                          Печать
+                        </a-menu-item>
+                        <a-menu-item key="3">
+                          Расчет
+                        </a-menu-item>
+                      </a-menu>
+                    </template>
+                  </a-dropdown>
+                </a-flex>
+
               </div>
             </template>
             <template v-else>
@@ -114,29 +125,42 @@
 
     <a-modal v-model:visible="isModalVisible" title="Редактирование записи" class="text-center">
       <a-form :label-col="{ span: 5 }" :wrapper-col="{ span: 19 }" class="mt-5 text-left">
-        <a-form-item label="Имя" v-if="editingKey && editableData[editingKey]">
+
+        <label class="flex flex-col gap-2 mb-5" v-if="editingKey && editableData[editingKey]">
+          <span>Имя</span>
           <a-input v-model:value="editableData[editingKey].name" :disabled="!isEditing" />
-        </a-form-item>
-        <a-form-item label="Возраст" v-if="editingKey && editableData[editingKey]">
+        </label>
+
+        <label class="flex flex-col gap-2 mb-5" v-if="editingKey && editableData[editingKey]">
+          <span>Возраст</span>
           <a-input-number v-model:value="editableData[editingKey].age" :disabled="!isEditing" class="w-full" />
-        </a-form-item>
-        <a-form-item label="Адрес" v-if="editingKey && editableData[editingKey]">
+        </label>
+
+        <label class="flex flex-col gap-2 mb-5" v-if="editingKey && editableData[editingKey]">
+          <span>Адрес</span>
           <a-select v-model:value="editableData[editingKey].address" :disabled="!isEditing">
             <a-select-option value="Центральный парк">Центральный парк</a-select-option>
             <a-select-option value="Парк на Краснопресненской набережной">Парк на Краснопресненской
               набережной</a-select-option>
             <a-select-option value="Парк Горького">Парк Горького</a-select-option>
           </a-select>
-        </a-form-item>
-        <a-form-item label="Профессия" v-if="editingKey && editableData[editingKey]">
+        </label>
+
+        <label class="flex flex-col gap-2 mb-5" v-if="editingKey && editableData[editingKey]">
+          <span>Профессия</span>
           <a-input v-model:value="editableData[editingKey].profession" :disabled="!isEditing" />
-        </a-form-item>
-        <a-form-item label="Компания" v-if="editingKey && editableData[editingKey]">
+        </label>
+
+        <label class="flex flex-col gap-2 mb-5" v-if="editingKey && editableData[editingKey]">
+          <span>Компания</span>
           <a-input v-model:value="editableData[editingKey].company" :disabled="!isEditing" />
-        </a-form-item>
-        <a-form-item label="Email" v-if="editingKey && editableData[editingKey]">
+        </label>
+
+        <label class="flex flex-col gap-2 mb-5" v-if="editingKey && editableData[editingKey]">
+          <span>Email</span>
           <a-input v-model:value="editableData[editingKey].email" :disabled="!isEditing" />
-        </a-form-item>
+        </label>
+        
       </a-form>
 
       <template #footer>
@@ -151,13 +175,18 @@
       </template>
 
     </a-modal>
+
+    <a-modal v-model:visible="isModalRemoveVisible" title="Подтверждение удаления" @ok="deleteRow"
+      @cancel="onCancelRemove">
+      <p>Вы уверены, что хотите удалить эту запись?</p>
+    </a-modal>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { cloneDeep } from 'lodash';
 import { reactive, ref, onMounted, onBeforeUnmount, h } from 'vue';
-import { SearchOutlined, DownloadOutlined } from '@ant-design/icons-vue';
+import { SearchOutlined, DownloadOutlined, EditOutlined, DeleteOutlined, EllipsisOutlined, PlusOutlined } from '@ant-design/icons-vue';
 import { message } from 'ant-design-vue';
 import type { UnwrapRef } from 'vue';
 import PageTitle from '@/components/PageTitle/PageTitle.vue';
@@ -176,6 +205,8 @@ interface DataItem {
 
 const loading = ref<boolean>(false);
 const isModalVisible = ref<boolean>(false);
+const isModalRemoveVisible = ref<boolean>(false);
+const modalRemoveIndex = ref<null | string>(null);
 const isEditing = ref<boolean>(false);
 const editingKey = ref<string | null>(null);
 const currentPage = ref<number>(1);
@@ -189,6 +220,16 @@ const isMobile = ref<boolean>(window.innerWidth <= 768);
 const handleResize = () => {
   isMobile.value = window.innerWidth <= 768;
 };
+
+const onCancelRemove = () => {
+  modalRemoveIndex.value = null;
+  isModalRemoveVisible.value = false;
+}
+
+const confirmDelete = (key: string) => {
+  modalRemoveIndex.value = key;
+  isModalRemoveVisible.value = true;
+}
 
 onMounted(() => {
   window.addEventListener('resize', handleResize);
@@ -268,7 +309,7 @@ const columns = [
     width: '12%',
   },
   {
-    title: 'Операции',
+    title: '',
     dataIndex: 'operation',
     key: 'operation',
   },
@@ -346,10 +387,12 @@ const save = (key: string | null) => {
   closeEditModal(key);
 };
 
-const deleteRow = (key: string) => {
-  dataSource.value = dataSource.value.filter(item => item.key !== key);
-  filteredDataSource.value = filteredDataSource.value.filter(item => item.key !== key);
+const deleteRow = () => {
+  dataSource.value = dataSource.value.filter(item => item.key !== modalRemoveIndex.value);
+  filteredDataSource.value = filteredDataSource.value.filter(item => item.key !== modalRemoveIndex.value);
   message.success('Запись удалена');
+
+  onCancelRemove();
 };
 
 const handleTableChange = (

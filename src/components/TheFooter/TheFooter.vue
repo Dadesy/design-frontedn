@@ -1,5 +1,5 @@
 <template>
-    <a-layout-footer class="text-center the-footer" :style="{ borderTop: `1px solid ${colors.colorBorderSecondary}` }">
+    <a-layout-footer class="text-center the-footer" :style="{ borderTop: `1px solid ${colors.colorBorderSecondary}`, backgroundColor: colors.colorBgContainer }">
         Эфко дизайн ©2024
     </a-layout-footer>
 </template>

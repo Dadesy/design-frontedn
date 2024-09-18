@@ -5,9 +5,12 @@
       @change="handleTableChange" size="small">
       <template #title>
         <a-flex justify="flex-end">
-          <a-tooltip title="Выгрузить в Excel" placement="left">
-            <a-button :icon="h(DownloadOutlined)"></a-button>
-          </a-tooltip>
+          <a-flex gap="small">
+            <a-button type="primary" :icon="h(PlusOutlined)">Добавить</a-button>
+            <a-tooltip title="Выгрузить в Excel" placement="left">
+              <a-button :icon="h(DownloadOutlined)"></a-button>
+            </a-tooltip>
+          </a-flex>
         </a-flex>
       </template>
       <template #bodyCell="{ column, text, record }">
@@ -17,60 +20,47 @@
         <template v-else>
           <template v-if="['name', 'age', 'address', 'checkbox', 'switch'].includes(column.dataIndex)">
             <div>
-              <template v-if="editableData[record.key]">
-                <a-select v-if="column.dataIndex === 'address'"
-                  v-model:value="editableData[record.key][column.dataIndex as 'address']"
-                  style="width: 100%; margin: -5px 0">
-                  <a-select-option value="London Park">London Park</a-select-option>
-                  <a-select-option value="New York Park">New York Park</a-select-option>
-                  <a-select-option value="San Francisco Park">San Francisco Park</a-select-option>
-                </a-select>
-                <a-input v-else-if="['name', 'age'].includes(column.dataIndex)"
-                  v-model:value="editableData[record.key][column.dataIndex as 'name' | 'age']" style="margin: -5px 0" />
-                <a-checkbox v-else-if="column.dataIndex === 'checkbox'"
-                  v-model:checked="editableData[record.key][column.dataIndex as 'checkbox']" style="margin: -5px 0">
-                  Включить
-                </a-checkbox>
-                <a-switch v-else-if="column.dataIndex === 'switch'"
-                  v-model:checked="editableData[record.key][column.dataIndex as 'switch']" style="margin: -5px 0" />
+              <template v-if="column.dataIndex === 'checkbox'">
+                {{ text ? 'Включено' : 'Выключено' }}
+              </template>
+              <template v-else-if="column.dataIndex === 'switch'">
+                {{ text ? 'Активен' : 'Неактивен' }}
               </template>
               <template v-else>
-                <template v-if="column.dataIndex === 'checkbox'">
-                  {{ text ? 'Включено' : 'Выключено' }}
-                </template>
-                <template v-else-if="column.dataIndex === 'switch'">
-                  {{ text ? 'Включено' : 'Выключено' }}
-                </template>
-                <template v-else>
-                  {{ text }}
-                </template>
+                {{ text }}
               </template>
             </div>
           </template>
           <template v-else-if="column.dataIndex === 'operation'">
             <div class="editable-row-operations">
-              <template v-if="editableData[record.key]">
-                <a-button type="link" @click="save(record.key)">Сохранить</a-button>
-                <a-button type="link" @click="cancel(record.key)">Отмена</a-button>
-              </template>
-              <template v-else>
-                <a-dropdown-button>
-                  Действие
+
+              <a-flex gap="small" justify="center" class="w-full">
+                <a-tooltip title="Редактировать" placement="left">
+                  <a-button :icon="h(EditOutlined)" @click="openEditModal(record)"></a-button>
+                </a-tooltip>
+
+                <a-tooltip title="Удалить" placement="left">
+                  <a-button :icon="h(DeleteOutlined)" @click="confirmDelete(record.key)"></a-button>
+                </a-tooltip>
+
+                <a-dropdown>
+                  <a-button :icon="h(EllipsisOutlined)"></a-button>
                   <template #overlay>
-                    <a-menu @click="$event.stopPropagation()">
-                      <a-menu-item @click="edit(record.key)">
-                        Редактировать
+                    <a-menu>
+                      <a-menu-item key="1">
+                        Просмотр
                       </a-menu-item>
-                      <a-menu-item>
-                        <a-popconfirm title="Вы уверены, что хотите удалить эту запись?"
-                          @confirm="deleteRow(record.key)" okText="Да" cancelText="Нет">
-                          Удалить
-                        </a-popconfirm>
+                      <a-menu-item key="2">
+                        Печать
+                      </a-menu-item>
+                      <a-menu-item key="3">
+                        Расчет
                       </a-menu-item>
                     </a-menu>
                   </template>
-                </a-dropdown-button>
-              </template>
+                </a-dropdown>
+              </a-flex>
+
             </div>
           </template>
         </template>
@@ -98,12 +88,68 @@
       </template>
     </a-table>
   </div>
+
+  <a-modal v-model:visible="isModalVisible" title="Редактирование записи" class="text-center">
+      <a-form :label-col="{ span: 5 }" :wrapper-col="{ span: 19 }" class="mt-5 text-left">
+
+        <label class="flex flex-col gap-2 mb-5" v-if="editingKey && editableData[editingKey]">
+          <span>Имя</span>
+          <a-input v-model:value="editableData[editingKey].name" :disabled="!isEditing" />
+        </label>
+
+        <label class="flex flex-col gap-2 mb-5" v-if="editingKey && editableData[editingKey]">
+          <span>Возраст</span>
+          <a-input-number v-model:value="editableData[editingKey].age" :disabled="!isEditing" class="w-full" />
+        </label>
+
+        <label class="flex flex-col gap-2 mb-5" v-if="editingKey && editableData[editingKey]">
+          <span>Адрес</span>
+          <a-select v-model:value="editableData[editingKey].address" :disabled="!isEditing">
+            <a-select-option value="Центральный парк">Центральный парк</a-select-option>
+            <a-select-option value="Парк на Краснопресненской набережной">Парк на Краснопресненской
+              набережной</a-select-option>
+            <a-select-option value="Парк Горького">Парк Горького</a-select-option>
+          </a-select>
+        </label>
+
+        <label class="flex flex-col gap-2 mb-5" v-if="editingKey && editableData[editingKey]">
+          <span>Состояние</span>
+          <a-checkbox v-model:checked="editableData[editingKey].checkbox" :disabled="!isEditing">
+            Включить
+          </a-checkbox>
+        </label>
+
+        <label class="flex gap-2 mb-5" v-if="editingKey && editableData[editingKey]">
+          <a-switch v-model:checked="editableData[editingKey].switch" :disabled="!isEditing" />
+          <span>Активность</span>
+        </label>
+        
+      </a-form>
+
+      <template #footer>
+        <div style="text-align: center;">
+          <a-button @click="closeEditModal(editingKey)">
+            Отмена
+          </a-button>
+          <a-button type="primary" @click="save(editingKey)">
+            Сохранить
+          </a-button>
+        </div>
+      </template>
+
+    </a-modal>
+
+  <a-modal v-model:visible="isModalRemoveVisible" title="Подтверждение удаления" @ok="deleteRow"
+    @cancel="onCancelRemove">
+    <p>Вы уверены, что хотите удалить эту запись?</p>
+  </a-modal>
+
 </template>
 
 <script lang="ts" setup>
 import { cloneDeep } from 'lodash';
 import { reactive, ref, onMounted, type UnwrapRef, h } from 'vue';
-import { SearchOutlined, DownloadOutlined } from '@ant-design/icons-vue';
+import { SearchOutlined, DownloadOutlined, EditOutlined, DeleteOutlined, EllipsisOutlined, PlusOutlined } from '@ant-design/icons-vue';
 import { message } from 'ant-design-vue';
 import type { TableColumnType } from 'ant-design-vue';
 import type { Key } from 'ant-design-vue/es/table/interface';
@@ -136,6 +182,21 @@ interface ColumnType extends TableColumnType<DataItem> {
 }
 
 const loading = ref<boolean>(true);
+const isModalRemoveVisible = ref<boolean>(false);
+const modalRemoveIndex = ref<null | string>(null);
+const isModalVisible = ref<boolean>(false);
+const isEditing = ref<boolean>(false);
+  const editingKey = ref<string | null>(null);
+
+const onCancelRemove = () => {
+  modalRemoveIndex.value = null;
+  isModalRemoveVisible.value = false;
+}
+
+const confirmDelete = (key: string) => {
+  modalRemoveIndex.value = key;
+  isModalRemoveVisible.value = true;
+}
 
 onMounted(() => {
   setTimeout(() => {
@@ -145,7 +206,7 @@ onMounted(() => {
 
 const columns: ColumnType[] = [
   {
-    title: 'name',
+    title: 'Имя',
     dataIndex: 'name',
     key: 'name',
     width: '20%',
@@ -166,7 +227,7 @@ const columns: ColumnType[] = [
     },
   },
   {
-    title: 'age',
+    title: 'Возраст',
     dataIndex: 'age',
     key: 'age',
     width: '10%',
@@ -187,7 +248,7 @@ const columns: ColumnType[] = [
     },
   },
   {
-    title: 'address',
+    title: 'Адрес',
     dataIndex: 'address',
     key: 'address',
     width: '30%',
@@ -208,19 +269,19 @@ const columns: ColumnType[] = [
     },
   },
   {
-    title: 'checkbox',
+    title: 'Состояние',
     dataIndex: 'checkbox',
     key: 'checkbox',
     width: '15%',
   },
   {
-    title: 'switch',
+    title: 'Активность',
     dataIndex: 'switch',
     key: 'switch',
     width: '15%',
   },
   {
-    title: 'operation',
+    title: '',
     dataIndex: 'operation',
     key: 'operation',
   },
@@ -262,30 +323,40 @@ const state = reactive({
   searchedColumn: '',
 });
 
-const edit = (key: Key) => {
-  const record = dataSource.value.find(item => key === item.key);
-  if (record) {
-    editableData[key] = cloneDeep(record);
-  }
+const openEditModal = (record: DataItem) => {
+  editableData[record.key] = cloneDeep(record);
+  editingKey.value = record.key;
+  isEditing.value = true;
+  isModalVisible.value = true;
 };
 
-const save = (key: Key) => {
+const closeEditModal = (key: string | null) => {
+  if (key) {
+    delete editableData[key];
+  }
+
+  editingKey.value = null;
+  isEditing.value = false;
+  isModalVisible.value = false;
+};
+
+const save = (key: string | null) => {
   const record = dataSource.value.find(item => key === item.key);
-  if (record && editableData[key]) {
+  if (key && record && editableData[key]) {
     Object.assign(record, editableData[key]);
     delete editableData[key];
     message.success('Изменения сохранены');
   }
+
+  closeEditModal(key);
 };
 
-const cancel = (key: Key) => {
-  delete editableData[key];
-};
-
-const deleteRow = (key: Key) => {
-  dataSource.value = dataSource.value.filter(item => item.key !== key);
-  filteredDataSource.value = filteredDataSource.value.filter(item => item.key !== key);
+const deleteRow = () => {
+  dataSource.value = dataSource.value.filter(item => item.key !== modalRemoveIndex.value);
+  filteredDataSource.value = filteredDataSource.value.filter(item => item.key !== modalRemoveIndex.value);
   message.success('Запись удалена');
+
+  onCancelRemove();
 };
 
 const handleTableChange = (

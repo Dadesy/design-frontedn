@@ -9,7 +9,6 @@ import App from './App.vue';
 import router from './router';
 import maskDirective from "./directives/mask";
 
-
 const app = createApp(App)
 
 app.use(router)
