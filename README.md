@@ -1,33 +1,59 @@
-# vue-project
+# Проект: Efko дизайн
 
-This template should help get you started developing with Vue 3 in Vite.
+Cтандарт эргономики интерфейса (Web)
 
-## Recommended IDE Setup
+Индекс проекта - FRNTDSGN
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+### Установка окружения:
 
-## Type Support for `.vue` Imports in TS
+Установить:
+- nodejs 21.6.2 и выше
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+### Запуск в режиме разработки
 
-## Customize configuration
+1. Склонируйте проект в **требуемую директорию**
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+~~~
+git clone https://gitlab.efko.ru/k.podkovyrov/update-frontend.git
+~~~
 
-## Project Setup
+2. Установите зависимости
 
-```sh
+~~~
 npm install
+~~~
+
+3. Запустите проект
+
+ ~~~
+ npm run dev
+ ~~~
+
+## Дополнительные команды
+
+### Компиляция и минимизация для производства
 ```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
 npm run build
 ```
+
+## Docker:
+
+1. `cp .env.dist .env`
+2. `make install`
+
+### Переменные окружения:
+
+- `ENV` - режим разработки (local, prod)
+- `TIMEZONE` - часовой пояс
+- `APP_PORT` - порт приложения
+- `DOCKER_REGISTRY` - хранилище Docker образов
+- `DOCKER_IMAGE_NAME` - имя Docker-образа
+- `DOCKER_IMAGE_VERSION` - версия (тег) Docker-образа
+
+### Основные `make`-команды
+
+* `make up` - запусть приложение
+* `make down` - остановить приложение
+* `make restart` - перезапустить приложение
+* `make install` - выполнить полный цикл установки и запуска приложения
+* `make shell` - подключится к консоли контейнера

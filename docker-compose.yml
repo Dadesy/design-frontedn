@@ -1,0 +1,17 @@
+version: "3.7"
+services:
+  efko-design:
+    image: ${DOCKER_REGISTRY}/${DOCKER_IMAGE_NAME}-nginx:${DOCKER_IMAGE_VERSION}
+    restart: always
+    build:
+      context: ./
+      dockerfile: docker/Dockerfile
+    environment:
+      TZ: ${TZ}
+    ports:
+      - ${APP_PORT}:80
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "2"
+        max-size: "50m"
